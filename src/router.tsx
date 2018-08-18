@@ -1,4 +1,4 @@
-import { GuardRoute } from 'components/smart/GuardRoute';
+import { GuardRoute } from 'components/smart';
 import { HomePage, LoginPage } from 'pages';
 import * as React from 'react';
 import { HashRouter, Route, Switch } from 'react-router-dom';

@@ -1,14 +1,22 @@
 import * as React from 'react';
 import { ReactNode } from 'react';
+import { connect } from 'react-redux';
 import { Redirect, Route } from 'react-router';
-import { authService } from 'services';
+import { State } from 'store/states';
 
-export const GuardRoute: React.StatelessComponent<any> = ({component: Component, ...rest}) => {
-  const token: string = authService.getToken();
+const mapState2Props = (state: State) => {
+  return {
+    loggedIn: state.authState.loggedIn
+  };
+};
+
+const GuardRoute: React.StatelessComponent<any> = ({component: Component, loggedIn, ...rest}) => {
   const renderByProps = (props: any): ReactNode => (
-    token ?
+    loggedIn ?
       <Component {...props}/> :
       <Redirect to={'/login'}/>
   );
   return <Route {...rest} render={renderByProps}/>;
 };
+
+export default connect(mapState2Props)(GuardRoute);

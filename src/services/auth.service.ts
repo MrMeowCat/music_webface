@@ -15,6 +15,11 @@ class AuthService extends HttpService {
     });
   };
 
+  public logout = (): void => {
+    storageService.remove(AuthService.TOKEN_KEY);
+    storageService.remove(AuthService.PERMISSIONS_KEY);
+  };
+
   public getToken = (): string => storageService.get(AuthService.TOKEN_KEY);
 
   public hasAnyPermission = (...permissions: string[]): boolean => {

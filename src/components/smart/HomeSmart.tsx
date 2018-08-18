@@ -1,19 +1,35 @@
 import { Home } from 'components/dumb';
 import * as React from 'react';
 import { ReactNode } from 'react';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+import { authService } from 'services';
+import { Actions, ActionTypes } from 'store/actions';
 
-interface ThisState {
+interface ThisProps {
+  logout: () => any;
 }
 
-export class HomeSmart extends React.Component<any, ThisState> {
+const mapDispatch2Props = (dispatch: Dispatch<ActionTypes>) => {
+  return {
+    logout: () => dispatch(Actions.logout())
+  };
+};
 
-  public constructor(props: any) {
+class HomeSmart extends React.Component<ThisProps> {
+
+  public constructor(props: ThisProps) {
     super(props);
-    this.state = {
-    };
   }
 
   public render(): ReactNode {
-    return <Home/>;
+    return <Home onLogoutClick={this.handleLogoutClick}/>;
   }
+
+  private handleLogoutClick = (): void => {
+    authService.logout();
+    this.props.logout();
+  };
 }
+
+export default connect(null, mapDispatch2Props)(HomeSmart);

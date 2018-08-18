@@ -2,6 +2,7 @@ import * as React from 'react';
 import { ReactNode } from 'react';
 
 interface ThisProps {
+  onLogoutClick: () => any;
 }
 
 export class Home extends React.Component<ThisProps> {
@@ -13,6 +14,10 @@ export class Home extends React.Component<ThisProps> {
   }
 
   public render(): ReactNode {
-    return <p>Home</p>;
+    return (
+      <div>
+        <button onClick={this.props.onLogoutClick}>Logout</button>
+      </div>
+    );
   }
 }
