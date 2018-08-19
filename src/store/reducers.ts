@@ -1,6 +1,6 @@
 import { combineReducers, Reducer } from 'redux';
 import { ActionKeys, ActionTypes } from 'store/actions';
-import { AuthState, initAuthState, State } from 'store/states';
+import { AudioListState, AuthState, initAudioListState, initAuthState, State } from 'store/states';
 
 const authReducer: Reducer<AuthState> = (state: AuthState = initAuthState, action: ActionTypes): AuthState => {
   switch (action.type) {
@@ -16,6 +16,16 @@ const authReducer: Reducer<AuthState> = (state: AuthState = initAuthState, actio
   }
 };
 
+const audioListReducer: Reducer<AudioListState> = (state: AudioListState = initAudioListState, action: ActionTypes)
+  : AudioListState => {
+  switch (action.type) {
+    case ActionKeys.GET_AUDIOS:
+      return {...state, audios: action.payload};
+    default: return state;
+  }
+};
+
 export const reducers: Reducer<State> = combineReducers<State>({
-  authState: authReducer
+  authState: authReducer,
+  audioListState: audioListReducer
 });

@@ -1,22 +1,14 @@
+import { AudioListSmart, NavSmart } from 'components/smart';
 import * as React from 'react';
 import { ReactNode } from 'react';
 
-interface ThisProps {
-  onLogoutClick: () => any;
-}
-
-export class Home extends React.Component<ThisProps> {
-
-  public constructor(props: ThisProps) {
-    super(props);
-    this.state = {
-    };
-  }
+export class Home extends React.Component {
 
   public render(): ReactNode {
     return (
       <div>
-        <button onClick={this.props.onLogoutClick}>Logout</button>
+        <NavSmart/>
+        <AudioListSmart/>
       </div>
     );
   }

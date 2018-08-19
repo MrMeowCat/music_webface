@@ -22,6 +22,10 @@ class AuthService extends HttpService {
 
   public getToken = (): string => storageService.get(AuthService.TOKEN_KEY);
 
+  public getAuthenticationHeader = (): {Authorization: string} => {
+    return {Authorization: `Bearer ${this.getToken()}`};
+  };
+
   public hasAnyPermission = (...permissions: string[]): boolean => {
     const savedPermissions: string = storageService.get(AuthService.PERMISSIONS_KEY);
     if (!savedPermissions) {
