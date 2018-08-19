@@ -11,6 +11,8 @@ import { State } from 'store/states';
 
 interface ThisProps {
   loggedIn: boolean;
+  pending: boolean;
+  error: boolean;
   loginPending: () => any;
   loginSuccess: () => any;
   loginFailed: () => any;
@@ -23,7 +25,9 @@ interface ThisState {
 
 const mapState2Props = (state: State) => {
   return {
-    loggedIn: state.authState.loggedIn
+    loggedIn: state.authState.loggedIn,
+    pending: state.authState.pending,
+    error: state.authState.error
   };
 };
 
@@ -48,7 +52,9 @@ class LoginSmart extends React.Component<ThisProps, ThisState> {
   public render(): ReactNode {
     return this.props.loggedIn ?
       <Redirect to={'/'}/> :
-      <Login onUsernameChange={this.handleUsernameChange}
+      <Login pending={this.props.pending}
+             error={this.props.error}
+             onUsernameChange={this.handleUsernameChange}
              onPasswordChange={this.handlePasswordChange}
              onLoginClick={this.handleLoginClick}/>;
   }

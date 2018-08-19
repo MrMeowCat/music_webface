@@ -7,9 +7,11 @@ export interface State {
 export interface AuthState {
   readonly loggedIn: boolean;
   readonly pending: boolean;
+  readonly error: boolean;
 }
 
 export const initAuthState: AuthState = {
   loggedIn: !!authService.getToken(),
-  pending: false
+  pending: false,
+  error: false
 };

@@ -1,11 +1,3 @@
-/* Action Keys */
-export enum ActionKeys {
-  LOGIN_PENDING = 'LOGIN PENDING',
-  LOGIN_SUCCESS = 'LOGIN SUCCESS',
-  LOGIN_FAILED = 'LOGIN FAILED',
-  LOGOUT = 'LOGOUT',
-}
-
 /* Action Types */
 interface LoginPendingAction {
   readonly type: ActionKeys.LOGIN_PENDING
@@ -28,6 +20,14 @@ export type ActionTypes =
 | LoginSuccessAction
 | LoginFailedAction
 | LogoutAction
+
+/* Action Keys */
+export enum ActionKeys {
+  LOGIN_PENDING = 'LOGIN PENDING',
+  LOGIN_SUCCESS = 'LOGIN SUCCESS',
+  LOGIN_FAILED = 'LOGIN FAILED',
+  LOGOUT = 'LOGOUT',
+}
 
 /* Action Creators */
 export namespace Actions {
