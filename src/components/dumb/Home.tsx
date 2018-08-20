@@ -8,6 +8,7 @@ export class Home extends React.Component {
     return (
       <div>
         <NavSmart/>
+        <div style={{paddingBottom: '160px'}}/>
         <AudioListSmart/>
       </div>
     );
