@@ -15,7 +15,9 @@ export class Nav extends React.Component<ThisProps> {
         <div className={'nav flex'}>
           <div className={'nav-search ml30 mr10'}>
             <div className={'flex-m'}>
-              <input type={'text'} onBlur={this.handleFocus}
+              <input type={'text'}
+                     placeholder={'Search Music...'}
+                     onBlur={this.handleFocus}
                      onFocus={this.handleFocus}
                      onChange={this.props.onSearchQueryChange}/>
               <i className={'fas fa-search'}/>

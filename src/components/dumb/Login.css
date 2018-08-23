@@ -37,12 +37,12 @@
   transition: all .2s ease;
 }
 .login-input input:hover, .login-input input:focus {
-  border-color: #38b989;
+  border-color: #3abe8c;
 }
 .login-footer button {
   width: 100%;
   height: 50px;
-  background: #38b989;
+  background: #3abe8c;
   border: none;
   border-radius: 2px;
   box-shadow: 0 1px 1px 0 rgba(0,0,0,.2);

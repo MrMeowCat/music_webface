@@ -3,16 +3,20 @@
   top: 0;
   left: 0;
   width: 100%;
+  height: 56px;
   box-shadow: 0 1px 1px 0 rgba(0,0,0,0.1);
   background: #fafafa;
+  z-index: 10;
 }
 .nav {
+  position: relative;
   width: 100%;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
 }
 .nav-search {
   width: 100%;
+  max-width: 600px;
   margin-top: 8px;
   margin-bottom: 8px;
 }
@@ -24,7 +28,7 @@
   transition: all 0.2s ease;
 }
 .nav-search div.active, .nav-search div:hover {
-  border-color: #38b989;
+  border-color: #3abe8c;
 }
 .nav-search div input {
   border: none;
@@ -45,27 +49,31 @@
 
 .nav-logout {
   height: 100%;
+  position: absolute;
+  right: 0;
 }
 .nav-logout a {
   height: 100%;
-  font-size: 0.9em;
+  font-size: 0.8em;
   font-weight: 600;
+  text-transform: uppercase;
   transition: all 0.2s ease;
   color: #333;
 }
 .nav-logout a:hover {
-  color: #38b989;
+  color: #3abe8c;
 }
 .nav-logout a i {
   margin-left: 14px;
   font-size: 1.4em;
 }
 
-@media(min-width: 1100px) {
-  .nav {
-    width: 1100px;
-  }
+@media(max-width: 992px) {
   .nav-search {
-
+    max-width: unset;
+  }
+  .nav-logout {
+    position: relative;
+    right: unset;
   }
 }

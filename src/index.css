@@ -9,7 +9,7 @@ body {
   padding: 0;
   font-family: 'Open Sans', sans-serif;
   height: 100%;
-  background: #f2f2f2;
+  background: #e5e5eb;
 }
 #root {
   height: 100%;
@@ -21,6 +21,20 @@ button, button:hover, a, a:focus, a:hover {
   outline: 0;
   cursor: pointer;
 }
+p, label, h1, h2, h3 {
+  margin: 0;
+}
+::-webkit-scrollbar {
+  width: 7px;
+  border: 1px solid #bbb;
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #38b484;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #339f74;
+}
 
 .flex {
   display: flex;
@@ -28,6 +42,10 @@ button, button:hover, a, a:focus, a:hover {
 .flex-c {
   display: flex;
   justify-content: center;
+}
+.flex-a {
+  display: flex;
+  align-items: center;
 }
 .flex-m {
   display: flex;
@@ -39,6 +57,11 @@ button, button:hover, a, a:focus, a:hover {
   flex-direction: column;
 }
 .flex-col-c {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.flex-col-a {
   display: flex;
   flex-direction: column;
   align-items: center;

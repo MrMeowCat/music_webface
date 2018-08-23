@@ -1,0 +1,105 @@
+.content-wrapper {
+  width: 100%;
+}
+.audio-list-wrapper {
+  background: #fafafa;
+  box-shadow: 0 0 1px 0 rgba(0,0,0,0.1);
+  flex: 1;
+}
+.audio-list {
+  padding-top: 160px;
+}
+.current-wrapper {
+  position: fixed;
+  height: 160px;
+  background: #fafafa;
+  border-bottom: 1px solid #ddd;
+  z-index: 8;
+}
+.current-wrapper img {
+  height: 100%;
+  width: auto;
+}
+
+.audio-wrapper {
+  position: relative;
+  border-bottom: 1px solid #ddd;
+  transition: all 0.2s ease;
+}
+.audio-wrapper:hover {
+  background: #f5f5f5;
+}
+.audio-wrapper > span {
+  display: block;
+  transition: all 0.2s ease;
+}
+.audio-wrapper > span.left-outline {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+}
+.audio-wrapper.active > span {
+  background: #3abe8c;
+}
+.audio button {
+  background: transparent;
+  height: 100%;
+  padding: 4px;
+  outline: 0;
+  border: none;
+}
+.audio button i {
+  color: #3abe8c;
+  font-size: 2.6em;
+  transition: all 0.2s ease;
+}
+.audio button:hover i {
+  color: #339f74;
+}
+.audio-header {
+  width: 100%;
+  overflow: hidden;
+}
+.audio-header h3 {
+  margin: 0;
+  color: #333;
+  font-size: 0.9em;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.audio-header h3 p {
+  display: inline-block;
+  font-style: italic;
+  color: #666;
+  font-size: 0.9em;
+  padding-left: 16px;
+}
+.audio-options p {
+  font-size: 0.8em;
+  color: #666;
+  padding-right: 16px;
+}
+.audio-options button {
+  background: transparent;
+  border: none;
+  height: 100%;
+  padding: 4px 10px;
+}
+.audio-options button i {
+  font-size: 1.4em;
+  color: #ccc;
+  transition: all 0.2s ease;
+}
+.audio-options button:hover i {
+  color: #339f74;
+}
+
+@media(min-width: 992px) {
+  .content-wrapper {
+    width: 992px;
+  }
+}
