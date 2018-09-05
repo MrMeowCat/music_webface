@@ -14,6 +14,7 @@ export interface AuthState {
 
 export interface AudioListState {
   readonly audios: Audio[];
+  readonly activeAudio: Audio;
   readonly spinner: boolean;
 }
 
@@ -25,5 +26,6 @@ export const initAuthState: AuthState = {
 
 export const initAudioListState: AudioListState = {
   audios: [],
+  activeAudio: {},
   spinner: false
 };

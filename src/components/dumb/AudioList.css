@@ -20,6 +20,63 @@
   height: 100%;
   width: auto;
 }
+.current {
+  width: 100%;
+  overflow: hidden;
+}
+.current h2 {
+  color: #333;
+  font-size: 1.6em;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.current h2 p {
+  display: inline-block;
+  font-style: italic;
+  color: #555;
+  font-size: 0.75em;
+  padding-left: 24px;
+}
+.controls {
+
+}
+.control-buttons button {
+  width: 50px;
+  height: 50px;
+  background: transparent;
+  border: 3px solid #3abe8c;
+  padding: 4px;
+  outline: 0;
+  margin-right: 14px;
+  border-radius: 50%;
+  box-shadow: 0 1px 1px 0 rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+}
+.control-buttons button:hover {
+  border-color: #339f74;
+}
+.control-buttons button i {
+  color: #3abe8c;
+  font-size: 1.5em;
+  transition: all 0.2s ease;
+}
+.control-buttons button:hover i {
+  color: #339f74;
+}
+.controls.disabled .control-buttons button {
+  border: 3px solid #aeaeae;
+}
+.controls.disabled .control-buttons button:hover {
+  border-color: #aeaeae;
+}
+.controls.disabled .control-buttons button i {
+  color: #aeaeae;
+}
+.controls.disabled .control-buttons button:hover i {
+  color: #aeaeae;
+}
 
 .audio-wrapper {
   position: relative;

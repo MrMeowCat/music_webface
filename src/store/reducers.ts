@@ -1,3 +1,4 @@
+import { Audio } from 'models';
 import { combineReducers, Reducer } from 'redux';
 import { ActionKeys, ActionTypes } from 'store/actions';
 import { AudioListState, AuthState, initAudioListState, initAuthState, State } from 'store/states';
@@ -21,6 +22,16 @@ const audioListReducer: Reducer<AudioListState> = (state: AudioListState = initA
   switch (action.type) {
     case ActionKeys.GET_AUDIOS:
       return {...state, audios: action.payload};
+    case ActionKeys.SWITCH_ACTIVE_AUDIO:
+      const audios: Audio[] = [];
+      for (const audio of state.audios) {
+        if (audio.id === state.activeAudio.id) {
+          audio.playing = false;
+        }
+        audios.push(audio);
+      }
+      action.audio.playing = action.playing;
+      return {...state, audios, activeAudio: action.audio};
     case ActionKeys.SHOW_SPINNER:
       return {...state, spinner: action.payload};
     default: return state;

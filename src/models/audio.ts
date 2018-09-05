@@ -7,4 +7,5 @@ export class Audio extends Dto {
   public lyrics?: string;
   public fileName?: string;
   public coverArtName?: string;
+  public playing?: boolean;
 }
