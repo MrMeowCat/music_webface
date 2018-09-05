@@ -21,6 +21,8 @@ const audioListReducer: Reducer<AudioListState> = (state: AudioListState = initA
   switch (action.type) {
     case ActionKeys.GET_AUDIOS:
       return {...state, audios: action.payload};
+    case ActionKeys.SHOW_SPINNER:
+      return {...state, spinner: action.payload};
     default: return state;
   }
 };

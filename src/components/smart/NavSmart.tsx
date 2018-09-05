@@ -1,4 +1,4 @@
-import { AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import { Nav } from 'components/dumb';
 import * as React from 'react';
 import { ReactNode } from 'react';
@@ -15,9 +15,15 @@ interface ThisProps {
 const mapDispatch2Props = (dispatch: Dispatch<ActionTypes>) => {
   return {
     getAudios: (query: string) => {
-      audioService.getAll(query).then((res: AxiosResponse) => {
-        dispatch(Actions.getAudios(res.data));
-      });
+      dispatch(Actions.showSpinner(true));
+      setTimeout(() => {
+        audioService.getAll(query).then((res: AxiosResponse) => {
+          dispatch(Actions.getAudios(res.data));
+          dispatch(Actions.showSpinner(false));
+        }).catch((err: AxiosError) => {
+          dispatch(Actions.showSpinner(false));
+        });
+      }, 3000)
     },
     logout: () => {
       authService.logout();
