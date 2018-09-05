@@ -8,8 +8,12 @@ import { audioService } from 'services';
 interface ThisProps {
   audios: Audio[];
   activeAudio: Audio;
+  shuffle: boolean;
+  repeat: boolean;
   spinner: boolean;
   onActivePlayClick: () => any;
+  onShuffleClick: () => any;
+  onRepeatClick: () => any;
   onItemPlayClick: (audio: Audio, e: any) => any;
 }
 
@@ -50,16 +54,22 @@ export class AudioList extends React.Component<ThisProps> {
           </h2>
           <div className={this.props.activeAudio.id ? 'controls flex' : ' controls flex disabled'}>
             <div className={'control-buttons'}>
-              <button>
+              <button disabled={!this.props.activeAudio.id}>
                 <i className={'far fa-comment'}/>
               </button>
-              <button>
-                <i className={'fas fa-random'}/>
+              <button disabled={!this.props.activeAudio.id}
+                      className={this.props.shuffle ? 'active' : ''}
+                      onClick={this.props.onShuffleClick}
+              >
+                <i className={ 'fas fa-random active'}/>
               </button>
-              <button>
+              <button disabled={!this.props.activeAudio.id}
+                      className={this.props.repeat ? 'active' : ''}
+                      onClick={this.props.onRepeatClick}
+              >
                 <i className={'fas fa-redo'}/>
               </button>
-              <button onClick={this.props.onActivePlayClick}>
+              <button disabled={!this.props.activeAudio.id} onClick={this.props.onActivePlayClick}>
                 <i className={this.props.activeAudio.playing ? 'fas fa-pause' : 'fas fa-play'}/>
               </button>
             </div>

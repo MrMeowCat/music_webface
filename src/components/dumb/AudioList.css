@@ -54,16 +54,28 @@
   box-shadow: 0 1px 1px 0 rgba(0,0,0,0.1);
   transition: all 0.2s ease;
 }
+.control-buttons button.active {
+  border-color: #f50000;
+}
 .control-buttons button:hover {
   border-color: #339f74;
+}
+.control-buttons button.active:hover {
+  border-color: #d50000;
 }
 .control-buttons button i {
   color: #3abe8c;
   font-size: 1.5em;
   transition: all 0.2s ease;
 }
+.control-buttons button.active i {
+  color: #f50000;
+}
 .control-buttons button:hover i {
   color: #339f74;
+}
+.control-buttons button.active:hover i {
+  color: #d50000;
 }
 .controls.disabled .control-buttons button {
   border: 3px solid #aeaeae;
@@ -71,11 +83,12 @@
 .controls.disabled .control-buttons button:hover {
   border-color: #aeaeae;
 }
+
 .controls.disabled .control-buttons button i {
-  color: #aeaeae;
+  color: #aeaeae !important;
 }
 .controls.disabled .control-buttons button:hover i {
-  color: #aeaeae;
+  color: #aeaeae !important;
 }
 
 .audio-wrapper {

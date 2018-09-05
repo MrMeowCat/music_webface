@@ -28,6 +28,16 @@ interface SwitchActiveAudioAction {
   readonly playing: boolean;
 }
 
+interface SwitchShuffleAction {
+  readonly type: ActionKeys.SWITCH_SHUFFLE;
+  readonly payload: boolean;
+}
+
+interface SwitchRepeatAction {
+  readonly type: ActionKeys.SWITCH_REPEAT;
+  readonly payload: boolean;
+}
+
 interface ShowSpinnerAction {
   readonly type: ActionKeys.SHOW_SPINNER;
   readonly payload: boolean;
@@ -40,6 +50,8 @@ export type ActionTypes =
   | LogoutAction
   | GetAudiosAction
   | SwitchActiveAudioAction
+  | SwitchShuffleAction
+  | SwitchRepeatAction
   | ShowSpinnerAction
 
 /* Action Keys */
@@ -50,6 +62,8 @@ export enum ActionKeys {
   LOGOUT = 'LOGOUT',
   GET_AUDIOS = 'GET_AUDIOS',
   SWITCH_ACTIVE_AUDIO = 'SWITCH_ACTIVE_AUDIO',
+  SWITCH_SHUFFLE = 'SWITCH_SHUFFLE',
+  SWITCH_REPEAT = 'SWITCH_REPEAT',
   SHOW_SPINNER = 'SHOW_SPINNER'
 }
 
@@ -72,6 +86,12 @@ export namespace Actions {
   };
   export const switchActiveAudio = (audio: Audio, playing: boolean): SwitchActiveAudioAction => {
     return {type: ActionKeys.SWITCH_ACTIVE_AUDIO, audio, playing};
+  };
+  export const switchShuffle = (shuffle: boolean): SwitchShuffleAction => {
+    return {type: ActionKeys.SWITCH_SHUFFLE, payload: shuffle};
+  };
+  export const switchRepeat = (repeat: boolean): SwitchRepeatAction => {
+    return {type: ActionKeys.SWITCH_REPEAT, payload: repeat};
   };
   export const showSpinner = (show: boolean): ShowSpinnerAction => {
     return {type: ActionKeys.SHOW_SPINNER, payload: show};

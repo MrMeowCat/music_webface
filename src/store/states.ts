@@ -1,5 +1,5 @@
 import { Audio } from 'models';
-import { authService } from 'services';
+import { audioService, authService } from 'services';
 
 export interface State {
   readonly authState: AuthState;
@@ -15,6 +15,8 @@ export interface AuthState {
 export interface AudioListState {
   readonly audios: Audio[];
   readonly activeAudio: Audio;
+  readonly shuffle: boolean;
+  readonly repeat: boolean;
   readonly spinner: boolean;
 }
 
@@ -27,5 +29,7 @@ export const initAuthState: AuthState = {
 export const initAudioListState: AudioListState = {
   audios: [],
   activeAudio: {},
+  shuffle: audioService.getShuffleSettings(),
+  repeat: audioService.getRepeatSettings(),
   spinner: false
 };

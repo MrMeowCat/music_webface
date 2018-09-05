@@ -32,6 +32,10 @@ const audioListReducer: Reducer<AudioListState> = (state: AudioListState = initA
       }
       action.audio.playing = action.playing;
       return {...state, audios, activeAudio: action.audio};
+    case ActionKeys.SWITCH_SHUFFLE:
+      return {...state, shuffle: action.payload};
+    case ActionKeys.SWITCH_REPEAT:
+      return {...state, repeat: action.payload};
     case ActionKeys.SHOW_SPINNER:
       return {...state, spinner: action.payload};
     default: return state;
