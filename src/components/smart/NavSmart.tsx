@@ -1,29 +1,45 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { Nav } from 'components/dumb';
+import { Audio } from 'models';
 import * as React from 'react';
 import { ReactNode } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { audioService, authService } from 'services';
+import { audioService, authService, SearchResult } from 'services';
 import { Actions, ActionTypes } from 'store/actions';
-import { Utils } from 'utils';
+import { State } from 'store/states';
 
 interface ThisProps {
-  getAudios?: (query: string) => any;
+  audios?: Audio[];
+  getAudios?: () => any;
+  searchAudios?: (audios: Audio[], query: string) => any;
   logout?: () => any;
 }
 
-const mapDispatch2Props = (dispatch: Dispatch<ActionTypes>) => {
+const mapState2Props: any = (state: State): any => {
   return {
-    getAudios: (query: string) => {
+    audios: state.audioListState.audios
+  }
+};
+
+const mapDispatch2Props: any = (dispatch: Dispatch<ActionTypes>): any => {
+  const searchAudios = (audios: Audio[], query: string) => {
+    audioService.searchAudios(audios, query).then((result: SearchResult) => {
+      dispatch(Actions.searchAudios(result));
+    });
+  };
+  return {
+    getAudios: () => {
       dispatch(Actions.showSpinner(true));
-      audioService.getAll(query).then((res: AxiosResponse) => {
+      audioService.getAll().then((res: AxiosResponse) => {
         dispatch(Actions.getAudios(res.data));
+        searchAudios(res.data, '');
         dispatch(Actions.showSpinner(false));
       }).catch((err: AxiosError) => {
         dispatch(Actions.showSpinner(false));
       });
     },
+    searchAudios,
     logout: () => {
       authService.logout();
       dispatch(Actions.logout());
@@ -35,7 +51,7 @@ class NavSmart extends React.Component<ThisProps> {
 
   public constructor(props: ThisProps) {
     super(props);
-    this.props.getAudios!('');
+    this.props.getAudios!();
   }
 
   public render(): ReactNode {
@@ -45,9 +61,7 @@ class NavSmart extends React.Component<ThisProps> {
 
   private handleSearchQueryChange = (e: any): void => {
     e.persist();
-    Utils.delay(() => {
-      this.props.getAudios!(e.target.value);
-    }, 500);
+    this.props.searchAudios!(this.props.audios!, e.target.value);
   };
 
   private handleLogoutClick = (): void => {
@@ -55,4 +69,4 @@ class NavSmart extends React.Component<ThisProps> {
   };
 }
 
-export default connect(null, mapDispatch2Props)(NavSmart);
+export default connect(mapState2Props, mapDispatch2Props)(NavSmart);

@@ -22,6 +22,8 @@ const audioListReducer: Reducer<AudioListState> = (state: AudioListState = initA
   switch (action.type) {
     case ActionKeys.GET_AUDIOS:
       return {...state, audios: action.payload};
+    case ActionKeys.SEARCH_AUDIOS:
+      return {...state, searchResult: action.payload};
     case ActionKeys.SWITCH_ACTIVE_AUDIO:
       const audios: Audio[] = [];
       for (const audio of state.audios) {

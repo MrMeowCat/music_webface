@@ -3,10 +3,11 @@ import { AudioListSpinner } from 'components/dumb/AudioListSpinner';
 import { Audio } from 'models';
 import * as React from 'react';
 import { ReactNode } from 'react';
-import { audioService } from 'services';
+import { audioService, SearchRecord, SearchResult } from 'services';
 
 interface ThisProps {
   audios: Audio[];
+  searchResult: SearchResult
   activeAudio: Audio;
   shuffle: boolean;
   repeat: boolean;
@@ -61,7 +62,7 @@ export class AudioList extends React.Component<ThisProps> {
                       className={this.props.shuffle ? 'active' : ''}
                       onClick={this.props.onShuffleClick}
               >
-                <i className={ 'fas fa-random active'}/>
+                <i className={'fas fa-random active'}/>
               </button>
               <button disabled={!this.props.activeAudio.id}
                       className={this.props.repeat ? 'active' : ''}
@@ -80,26 +81,56 @@ export class AudioList extends React.Component<ThisProps> {
   };
 
   private renderAudios = (): ReactNode => {
-    return this.props.audios.map((audio: Audio) => (
-      <div key={audio.id} className={audio.playing || audio.id === this.props.activeAudio.id ?
-        'audio-wrapper active' : 'audio-wrapper'}>
-        <span className={'left-outline'}/>
-        <div className={'audio p20 flex'}>
-          <button className={'item-play'} onClick={this.props.onItemPlayClick.bind(this, audio)}>
-            <i className={audio.playing ? 'far fa-pause-circle' : 'far fa-play-circle'}/>
-          </button>
-          <div className={'audio-header pl20 pr20 flex-a'}>
-            <h3>{this.getTitleOrDefault(audio)}<p>{this.getAuthorOrDefault(audio)}</p></h3>
-          </div>
-          <div className={'audio-options flex-m'}>
-            <p>{this.getDuration(audio)}</p>
-            <button>
-              <i className={'fas fa-ellipsis-v'}/>
+    return this.props.searchResult.records.map((record: SearchRecord) => {
+      const audio: Audio = this.props.audios[record.index];
+      return (
+        <div key={audio.id} className={audio.playing || audio.id === this.props.activeAudio.id ?
+          'audio-wrapper active' : 'audio-wrapper'}>
+          <span className={'left-outline'}/>
+          <div className={'audio p20 flex'}>
+            <button className={'item-play'} onClick={this.props.onItemPlayClick.bind(this, audio)}>
+              <i className={audio.playing ? 'far fa-pause-circle' : 'far fa-play-circle'}/>
             </button>
+            <div className={'audio-header pl20 pr20 flex-a'}>
+              {this.renderItemHeader(audio, record)}
+            </div>
+            <div className={'audio-options flex-m'}>
+              <p>{this.getDuration(audio)}</p>
+              <button>
+                <i className={'fas fa-ellipsis-v'}/>
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    ));
+      );
+    });
+  };
+
+  private renderItemHeader = (audio: Audio, record: SearchRecord): ReactNode => {
+    const title: string = this.getTitleOrDefault(audio);
+    const author: string = this.getAuthorOrDefault(audio);
+    if (record.start === record.end) {
+      return <h3>{title}<p>{author}</p></h3>;
+    }
+    const highlightTitle = (): ReactNode => (
+      <h3>
+        {title.slice(0, record.start)}
+        <span>{title.slice(record.start, record.end)}</span>
+        {title.slice(record.end)}
+        <p>{author}</p>
+      </h3>
+    );
+    const highlightAuthor = (): ReactNode => (
+      <h3>
+        {title}
+        <p>
+          {author.slice(0, record.start)}
+          <span>{author.slice(record.start, record.end)}</span>
+          {author.slice(record.end)}
+        </p>
+      </h3>
+    );
+    return record.inTitle ? highlightTitle() : highlightAuthor();
   };
 
   private getTitleOrDefault = (audio: Audio): string => {

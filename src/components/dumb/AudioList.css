@@ -143,10 +143,12 @@
 }
 .audio-header h3 p {
   display: inline-block;
-  font-style: italic;
   color: #666;
   font-size: 0.9em;
   padding-left: 16px;
+}
+.audio-header span {
+  background: #fffc63;
 }
 .audio-options p {
   font-size: 0.8em;

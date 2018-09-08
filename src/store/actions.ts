@@ -1,4 +1,5 @@
 import { Audio } from 'models';
+import { SearchResult } from 'services';
 
 /* Action Types */
 interface LoginPendingAction {
@@ -20,6 +21,11 @@ interface LogoutAction {
 interface GetAudiosAction {
   readonly type: ActionKeys.GET_AUDIOS;
   readonly payload: Audio[];
+}
+
+interface SearchAudiosAction {
+  readonly type: ActionKeys.SEARCH_AUDIOS;
+  readonly payload: SearchResult;
 }
 
 interface SwitchActiveAudioAction {
@@ -49,6 +55,7 @@ export type ActionTypes =
   | LoginFailedAction
   | LogoutAction
   | GetAudiosAction
+  | SearchAudiosAction
   | SwitchActiveAudioAction
   | SwitchShuffleAction
   | SwitchRepeatAction
@@ -61,6 +68,7 @@ export enum ActionKeys {
   LOGIN_FAILED = 'LOGIN FAILED',
   LOGOUT = 'LOGOUT',
   GET_AUDIOS = 'GET_AUDIOS',
+  SEARCH_AUDIOS = 'SEARCH_AUDIOS',
   SWITCH_ACTIVE_AUDIO = 'SWITCH_ACTIVE_AUDIO',
   SWITCH_SHUFFLE = 'SWITCH_SHUFFLE',
   SWITCH_REPEAT = 'SWITCH_REPEAT',
@@ -83,6 +91,9 @@ export namespace Actions {
   };
   export const getAudios = (audios: Audio[]): GetAudiosAction => {
     return {type: ActionKeys.GET_AUDIOS, payload: audios};
+  };
+  export const searchAudios = (result: SearchResult): SearchAudiosAction => {
+    return {type: ActionKeys.SEARCH_AUDIOS, payload: result};
   };
   export const switchActiveAudio = (audio: Audio, playing: boolean): SwitchActiveAudioAction => {
     return {type: ActionKeys.SWITCH_ACTIVE_AUDIO, audio, playing};

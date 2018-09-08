@@ -1,23 +1,64 @@
 import { AxiosResponse } from 'axios';
+import { Audio } from 'models';
 import { authService } from 'services/auth.service';
 import { HttpService } from 'services/http.service';
 import { storageService } from 'services/index';
 
+export interface SearchResult {
+  records: SearchRecord[];
+}
+
+export interface SearchRecord {
+  index: number;
+  start: number;
+  end: number;
+  inTitle: boolean;
+}
+
 class AudioService extends HttpService {
   private static AUDIO_URL: string = '/api/audio';
   private static COVER_ART_URL: string = '/api/audio/cover';
+  private static AUDIO_FILE_URL: string = '/api/audio/file';
   private static SHUFFLE_KEY: string = 'shuffle';
   private static REPEAT_KEY: string = 'repeat';
 
-  public getAll = (query: string): Promise<AxiosResponse> => {
+  public getAll = (): Promise<AxiosResponse> => {
     return this.get(AudioService.AUDIO_URL, {
-      headers: authService.getAuthenticationHeader(),
-      params: {query}
+      headers: authService.getAuthenticationHeader()
+    });
+  };
+
+  public searchAudios = (audios: Audio[], query: string): Promise<SearchResult> => {
+    return new Promise<SearchResult>(resolve => {
+      const result: SearchResult = {
+        records: []
+      };
+      audios.forEach((audio: Audio, index: number) => {
+        let start: number = -1;
+        let end: number = -1;
+        let inTitle: boolean = true;
+        if (audio.title) {
+          start = audio.title.search(new RegExp(query, 'i'));
+        }
+        if (start === -1 && audio.author) {
+          start = audio.author.search(new RegExp(query, 'i'));
+          inTitle = false;
+        }
+        if (start !== -1) {
+          end = start + query.length;
+          result.records.push({index, start, end, inTitle});
+        }
+      });
+      resolve(result);
     });
   };
 
   public getCoverArtUrl = (coverArtName: string): string => {
     return `${HttpService.DOMAIN}${AudioService.COVER_ART_URL}/${coverArtName}`;
+  };
+
+  public getAudioFileUrl = (file: string): string => {
+    return `${HttpService.DOMAIN}${AudioService.AUDIO_FILE_URL}/${file}`;
   };
 
   public getShuffleSettings = (): boolean => {

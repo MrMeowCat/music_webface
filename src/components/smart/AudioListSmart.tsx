@@ -4,12 +4,13 @@ import * as React from 'react';
 import { ReactNode } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { audioService } from 'services';
+import { audioService, SearchResult } from 'services';
 import { Actions, ActionTypes } from 'store/actions';
 import { State } from 'store/states';
 
 interface ThisProps {
   audios?: Audio[];
+  searchResult?: SearchResult;
   activeAudio?: Audio;
   shuffle?: boolean;
   repeat?: boolean;
@@ -22,6 +23,7 @@ interface ThisProps {
 const mapState2Props = (state: State) => {
   return {
     audios: state.audioListState.audios,
+    searchResult: state.audioListState.searchResult,
     activeAudio: state.audioListState.activeAudio,
     shuffle: state.audioListState.shuffle,
     repeat: state.audioListState.repeat,
@@ -49,6 +51,7 @@ class AudioListSmart extends React.Component<ThisProps> {
 
   public render(): ReactNode {
     return <AudioList audios={this.props.audios!}
+                      searchResult={this.props.searchResult!}
                       activeAudio={this.props.activeAudio!}
                       shuffle={this.props.shuffle!}
                       repeat={this.props.repeat!}
