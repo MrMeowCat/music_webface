@@ -2,7 +2,7 @@ import { AxiosError, AxiosResponse } from 'axios';
 import { Nav } from 'components/dumb';
 import { Audio } from 'models';
 import * as React from 'react';
-import { ReactNode } from 'react';
+import { ReactNode, RefObject } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { audioService, authService, SearchResult } from 'services';
@@ -13,6 +13,7 @@ interface ThisProps {
   audios?: Audio[];
   getAudios?: () => any;
   searchAudios?: (audios: Audio[], query: string) => any;
+  upload?: (fileUploadInput: HTMLInputElement) => any;
   logout?: () => any;
 }
 
@@ -23,31 +24,53 @@ const mapState2Props: any = (state: State): any => {
 };
 
 const mapDispatch2Props: any = (dispatch: Dispatch<ActionTypes>): any => {
-  const searchAudios = (audios: Audio[], query: string) => {
+  const getAudios = (): void => {
+    dispatch(Actions.showSpinner(true));
+    audioService.getAll().then((res: AxiosResponse) => {
+      dispatch(Actions.getAudios(res.data));
+      searchAudios(res.data, '');
+      dispatch(Actions.showSpinner(false));
+    }).catch((err: AxiosError) => {
+      dispatch(Actions.showSpinner(false));
+    });
+  };
+  const searchAudios = (audios: Audio[], query: string): void => {
     audioService.searchAudios(audios, query).then((result: SearchResult) => {
       dispatch(Actions.searchAudios(result));
     });
   };
-  return {
-    getAudios: () => {
+  const upload = (fileUploadInput: HTMLInputElement): void => {
+    fileUploadInput.onchange = (e => {
+      if (!fileUploadInput.files) {
+        return;
+      }
       dispatch(Actions.showSpinner(true));
-      audioService.getAll().then((res: AxiosResponse) => {
-        dispatch(Actions.getAudios(res.data));
-        searchAudios(res.data, '');
-        dispatch(Actions.showSpinner(false));
+      audioService.upload(fileUploadInput.files[0]).then((res: AxiosResponse) => {
+        getAudios();
       }).catch((err: AxiosError) => {
         dispatch(Actions.showSpinner(false));
+      }).then(() => {
+        fileUploadInput.value = '';
       });
-    },
+    });
+    fileUploadInput.click();
+  };
+  const logout = (): void => {
+    authService.logout();
+    dispatch(Actions.logout());
+  };
+
+  return {
+    getAudios,
     searchAudios,
-    logout: () => {
-      authService.logout();
-      dispatch(Actions.logout());
-    }
+    upload,
+    logout
   };
 };
 
 class NavSmart extends React.Component<ThisProps> {
+
+  private fileUploadRef: RefObject<HTMLInputElement> = React.createRef();
 
   public constructor(props: ThisProps) {
     super(props);
@@ -55,13 +78,29 @@ class NavSmart extends React.Component<ThisProps> {
   }
 
   public render(): ReactNode {
-    return <Nav onSearchQueryChange={this.handleSearchQueryChange}
-                onLogoutClick={this.handleLogoutClick}/>;
+    return (
+      <div>
+        <Nav onSearchQueryChange={this.handleSearchQueryChange}
+             onUploadClick={this.handleUploadClick}
+             onLogoutClick={this.handleLogoutClick}/>
+        <input type={'file'}
+               style={{display: 'none'}}
+               accept={'audio/mpeg'}
+               ref={this.fileUploadRef}/>
+      </div>
+    );
   }
 
   private handleSearchQueryChange = (e: any): void => {
-    e.persist();
     this.props.searchAudios!(this.props.audios!, e.target.value);
+  };
+
+  private handleUploadClick = (): void => {
+    const fileUploadInput: HTMLInputElement | null = this.fileUploadRef.current;
+    if (!fileUploadInput) {
+      return;
+    }
+    this.props.upload!(fileUploadInput);
   };
 
   private handleLogoutClick = (): void => {

@@ -34,6 +34,10 @@ class AudioService extends HttpService {
         records: []
       };
       audios.forEach((audio: Audio, index: number) => {
+        if (!query) {
+          result.records.push({index, start: 0, end: 0, inTitle: true});
+          return;
+        }
         let start: number = -1;
         let end: number = -1;
         let inTitle: boolean = true;
@@ -50,6 +54,17 @@ class AudioService extends HttpService {
         }
       });
       resolve(result);
+    });
+  };
+
+  public upload = (file: File): Promise<AxiosResponse> => {
+    const fd: FormData = new FormData();
+    fd.append('file', file);
+    return this.post(AudioService.AUDIO_URL, fd, {
+      headers: {
+        ...authService.getAuthenticationHeader(),
+        'content-type': 'multipart/form-data',
+      }
     });
   };
 

@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 
 interface ThisProps {
   onSearchQueryChange: (e: any) => any;
+  onUploadClick: () => any;
   onLogoutClick: () => any;
 }
 
@@ -23,6 +24,9 @@ export class Nav extends React.Component<ThisProps> {
               <i className={'fas fa-search'}/>
             </div>
           </div>
+          <button className={'upload-btn'} onClick={this.props.onUploadClick}>
+            <i className={'fas fa-cloud-upload-alt'}/>
+          </button>
           <div className={'nav-logout ml30 mr30'}>
             <a className={'flex-m'} onClick={this.props.onLogoutClick}>
               Logout

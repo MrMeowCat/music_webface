@@ -152,6 +152,7 @@ export class AudioList extends React.Component<ThisProps> {
     const duration: number = audio.duration;
     const minutes: number = Math.floor(duration / 60);
     const seconds: number = duration % 60;
-    return `${minutes}:${seconds.toString()}`;
+    const secondsString: string = seconds > 9 ? seconds.toString() : `0${seconds}`;
+    return `${minutes}:${secondsString}`;
   };
 }
