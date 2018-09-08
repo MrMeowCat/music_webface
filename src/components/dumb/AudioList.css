@@ -169,6 +169,9 @@
 .audio-options button:hover i {
   color: #339f74;
 }
+.audio-options button:last-of-type:hover i {
+  color: #e50000;
+}
 
 @media(min-width: 992px) {
   .content-wrapper {

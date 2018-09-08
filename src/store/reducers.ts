@@ -24,7 +24,12 @@ const audioListReducer: Reducer<AudioListState> = (state: AudioListState = initA
       return {...state, audios: action.payload};
     case ActionKeys.SEARCH_AUDIOS:
       return {...state, searchResult: action.payload};
-    case ActionKeys.SWITCH_ACTIVE_AUDIO:
+    case ActionKeys.DELETE_AUDIO: {
+      const audios: Audio[] = state.audios.filter((audio: Audio) => audio.id !== action.payload.id);
+      const activeAudio: Audio = action.payload.id === state.activeAudio.id ? {} : state.activeAudio;
+      return {...state, audios, activeAudio};
+    }
+    case ActionKeys.SWITCH_ACTIVE_AUDIO: {
       const audios: Audio[] = [];
       for (const audio of state.audios) {
         if (audio.id === state.activeAudio.id) {
@@ -34,6 +39,7 @@ const audioListReducer: Reducer<AudioListState> = (state: AudioListState = initA
       }
       action.audio.playing = action.playing;
       return {...state, audios, activeAudio: action.audio};
+    }
     case ActionKeys.SWITCH_SHUFFLE:
       return {...state, shuffle: action.payload};
     case ActionKeys.SWITCH_REPEAT:

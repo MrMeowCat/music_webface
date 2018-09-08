@@ -1,3 +1,4 @@
+import { AxiosError, AxiosResponse } from 'axios';
 import { AudioList } from 'components/dumb';
 import { Audio } from 'models';
 import * as React from 'react';
@@ -18,6 +19,7 @@ interface ThisProps {
   switchActiveAudio: (audio: Audio, playing: boolean) => any;
   switchShuffle: (shuffle: boolean) => any;
   switchRepeat: (repeat: boolean) => any;
+  deleteAudio?: (audio: Audio) => any;
 }
 
 const mapState2Props = (state: State) => {
@@ -28,23 +30,31 @@ const mapState2Props = (state: State) => {
     shuffle: state.audioListState.shuffle,
     repeat: state.audioListState.repeat,
     spinner: state.audioListState.spinner
-  }
+  };
 };
 
 const mapDispatch2Props = (dispatch: Dispatch<ActionTypes>) => {
   return {
-    switchActiveAudio: (audio: Audio, playing: boolean) => {
+    switchActiveAudio: (audio: Audio, playing: boolean): void => {
       dispatch(Actions.switchActiveAudio(audio, playing));
     },
-    switchShuffle: (shuffle: boolean) => {
+    switchShuffle: (shuffle: boolean): void => {
       audioService.saveShuffleSettings(shuffle);
       dispatch(Actions.switchShuffle(shuffle));
     },
-    switchRepeat: (repeat: boolean) => {
+    switchRepeat: (repeat: boolean): void => {
       audioService.saveRepeatSettings(repeat);
       dispatch(Actions.switchRepeat(repeat));
     },
-  }
+    deleteAudio: (audio: Audio): void => {
+      dispatch(Actions.showSpinner(true));
+      audioService.deleteAudio(audio).then((res: AxiosResponse) => {
+        dispatch(Actions.deleteAudio(audio));
+      }).catch((err: AxiosError) => {
+        console.log(err);
+      }).then(() => dispatch(Actions.showSpinner(false)));
+    }
+  };
 };
 
 class AudioListSmart extends React.Component<ThisProps> {
@@ -59,7 +69,8 @@ class AudioListSmart extends React.Component<ThisProps> {
                       onActivePlayClick={this.handleActivePlayClick}
                       onShuffleClick={this.handleShuffleClick}
                       onRepeatClick={this.handleRepeatClick}
-                      onItemPlayClick={this.handleItemPlayClick}/>;
+                      onItemPlayClick={this.handleItemPlayClick}
+                      onItemDeleteClick={this.handleItemDeleteClick}/>;
   }
 
   private handleActivePlayClick = (): void => {
@@ -80,6 +91,10 @@ class AudioListSmart extends React.Component<ThisProps> {
       return;
     }
     this.props.switchActiveAudio(audio, true);
+  };
+
+  private handleItemDeleteClick = (audio: Audio): void => {
+    this.props.deleteAudio!(audio);
   };
 }
 

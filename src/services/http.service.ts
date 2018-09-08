@@ -16,6 +16,6 @@ export class HttpService {
   };
 
   public delete = (url: string, config?: AxiosRequestConfig): Promise<AxiosResponse> => {
-    return axios.get(`${HttpService.DOMAIN}${url}`, config);
+    return axios.delete(`${HttpService.DOMAIN}${url}`, config);
   };
 }

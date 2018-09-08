@@ -28,6 +28,11 @@ interface SearchAudiosAction {
   readonly payload: SearchResult;
 }
 
+interface DeleteAudioAction {
+  readonly type: ActionKeys.DELETE_AUDIO;
+  readonly payload: Audio;
+}
+
 interface SwitchActiveAudioAction {
   readonly type: ActionKeys.SWITCH_ACTIVE_AUDIO;
   readonly audio: Audio;
@@ -56,6 +61,7 @@ export type ActionTypes =
   | LogoutAction
   | GetAudiosAction
   | SearchAudiosAction
+  | DeleteAudioAction
   | SwitchActiveAudioAction
   | SwitchShuffleAction
   | SwitchRepeatAction
@@ -69,6 +75,7 @@ export enum ActionKeys {
   LOGOUT = 'LOGOUT',
   GET_AUDIOS = 'GET_AUDIOS',
   SEARCH_AUDIOS = 'SEARCH_AUDIOS',
+  DELETE_AUDIO = 'DELETE_AUDIO',
   SWITCH_ACTIVE_AUDIO = 'SWITCH_ACTIVE_AUDIO',
   SWITCH_SHUFFLE = 'SWITCH_SHUFFLE',
   SWITCH_REPEAT = 'SWITCH_REPEAT',
@@ -94,6 +101,9 @@ export namespace Actions {
   };
   export const searchAudios = (result: SearchResult): SearchAudiosAction => {
     return {type: ActionKeys.SEARCH_AUDIOS, payload: result};
+  };
+  export const deleteAudio = (audio: Audio): DeleteAudioAction => {
+    return {type: ActionKeys.DELETE_AUDIO, payload: audio};
   };
   export const switchActiveAudio = (audio: Audio, playing: boolean): SwitchActiveAudioAction => {
     return {type: ActionKeys.SWITCH_ACTIVE_AUDIO, audio, playing};

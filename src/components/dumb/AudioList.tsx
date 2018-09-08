@@ -16,6 +16,7 @@ interface ThisProps {
   onShuffleClick: () => any;
   onRepeatClick: () => any;
   onItemPlayClick: (audio: Audio, e: any) => any;
+  onItemDeleteClick: (audio: Audio) => any;
 }
 
 export class AudioList extends React.Component<ThisProps> {
@@ -83,6 +84,9 @@ export class AudioList extends React.Component<ThisProps> {
   private renderAudios = (): ReactNode => {
     return this.props.searchResult.records.map((record: SearchRecord) => {
       const audio: Audio = this.props.audios[record.index];
+      if (!audio) {
+        return;
+      }
       return (
         <div key={audio.id} className={audio.playing || audio.id === this.props.activeAudio.id ?
           'audio-wrapper active' : 'audio-wrapper'}>
@@ -97,7 +101,10 @@ export class AudioList extends React.Component<ThisProps> {
             <div className={'audio-options flex-m'}>
               <p>{this.getDuration(audio)}</p>
               <button>
-                <i className={'fas fa-ellipsis-v'}/>
+                <i className={'fas fa-edit'}/>
+              </button>
+              <button onClick={this.props.onItemDeleteClick.bind(this, audio)}>
+                <i className={'fas fa-times'}/>
               </button>
             </div>
           </div>
