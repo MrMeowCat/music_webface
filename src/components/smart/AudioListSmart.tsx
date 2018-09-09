@@ -22,6 +22,11 @@ interface ThisProps {
   deleteAudio?: (audio: Audio) => any;
 }
 
+interface ThisState {
+  editMode: boolean;
+  editAudio: Audio & {coverArt?: File};
+}
+
 const mapState2Props = (state: State) => {
   return {
     audios: state.audioListState.audios,
@@ -57,7 +62,19 @@ const mapDispatch2Props = (dispatch: Dispatch<ActionTypes>) => {
   };
 };
 
-class AudioListSmart extends React.Component<ThisProps> {
+class AudioListSmart extends React.Component<ThisProps, ThisState> {
+
+  public constructor(props: ThisProps) {
+    super(props);
+    this.state = {
+      editMode: false,
+      editAudio: {
+        title: '',
+        author: '',
+        lyrics: ''
+      }
+    };
+  }
 
   public render(): ReactNode {
     return <AudioList audios={this.props.audios!}
@@ -66,11 +83,20 @@ class AudioListSmart extends React.Component<ThisProps> {
                       shuffle={this.props.shuffle!}
                       repeat={this.props.repeat!}
                       spinner={this.props.spinner!}
+                      editMode={this.state.editMode}
+                      editAudio={this.state.editAudio}
                       onActivePlayClick={this.handleActivePlayClick}
                       onShuffleClick={this.handleShuffleClick}
                       onRepeatClick={this.handleRepeatClick}
                       onItemPlayClick={this.handleItemPlayClick}
-                      onItemDeleteClick={this.handleItemDeleteClick}/>;
+                      onItemDeleteClick={this.handleItemDeleteClick}
+                      onEditWrapperShow={this.handleEditWrapperShow}
+                      onEditWrapperHide={this.handleEditWrapperHide}
+                      onEditTitleChange={this.handleEditTitleChange}
+                      onEditAuthorChange={this.handleEditAuthorChange}
+                      onEditLyricsChange={this.handleEditLyricsChange}
+                      onEditCoverArtChange={this.handleEditCoverArtChange}
+                      onEditAudioSave={this.handleEditAudioSave}/>;
   }
 
   private handleActivePlayClick = (): void => {
@@ -95,6 +121,56 @@ class AudioListSmart extends React.Component<ThisProps> {
 
   private handleItemDeleteClick = (audio: Audio): void => {
     this.props.deleteAudio!(audio);
+  };
+
+  private handleEditWrapperShow = (audio: Audio): void => {
+    this.setState({
+      editMode: true,
+      editAudio: {...audio}
+    });
+  };
+
+  private handleEditWrapperHide = (): void => {
+    this.setState({
+      editMode: false,
+      editAudio: {
+        title: '',
+        author: '',
+        lyrics: '',
+        coverArt: undefined
+      }
+    });
+  };
+
+  private handleEditTitleChange = (e: any): void => {
+    this.setState({
+      editAudio: {...this.state.editAudio, title: e.target.value}
+    });
+  };
+
+  private handleEditAuthorChange = (e: any): void => {
+    this.setState({
+      editAudio: {...this.state.editAudio, author: e.target.value}
+    });
+  };
+
+  private handleEditLyricsChange = (e: any): void => {
+    this.setState({
+      editAudio: {...this.state.editAudio, lyrics: e.target.value}
+    });
+  };
+
+  private handleEditCoverArtChange = (e: any): void => {
+    if (!e.target || !e.target.files || !e.target.files[0]) {
+      return;
+    }
+    this.setState({
+      editAudio: {...this.state.editAudio, coverArt: e.target.files[0]}
+    });
+  };
+
+  private handleEditAudioSave = (): void => {
+    console.log(this.state.editAudio);
   };
 }
 
