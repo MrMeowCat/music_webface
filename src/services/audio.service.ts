@@ -68,6 +68,12 @@ class AudioService extends HttpService {
     });
   };
 
+  public save = (audio: Audio): Promise<AxiosResponse> => {
+    return this.put(AudioService.AUDIO_URL, audio, {
+      headers: authService.getAuthenticationHeader()
+    });
+  };
+
   public deleteAudio = (audio: Audio): Promise<AxiosResponse> => {
     return this.delete(`${AudioService.AUDIO_URL}/${audio.id}`, {
       headers: authService.getAuthenticationHeader()

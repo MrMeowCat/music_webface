@@ -19,12 +19,13 @@ interface ThisProps {
   switchActiveAudio: (audio: Audio, playing: boolean) => any;
   switchShuffle: (shuffle: boolean) => any;
   switchRepeat: (repeat: boolean) => any;
+  saveAudio?: (audio: Audio) => any;
   deleteAudio?: (audio: Audio) => any;
 }
 
 interface ThisState {
   editMode: boolean;
-  editAudio: Audio & {coverArt?: File};
+  editAudio: Audio;
 }
 
 const mapState2Props = (state: State) => {
@@ -50,6 +51,14 @@ const mapDispatch2Props = (dispatch: Dispatch<ActionTypes>) => {
     switchRepeat: (repeat: boolean): void => {
       audioService.saveRepeatSettings(repeat);
       dispatch(Actions.switchRepeat(repeat));
+    },
+    saveAudio: (audio: Audio): void => {
+      dispatch(Actions.showSpinner(true));
+      audioService.save(audio).then((res: AxiosResponse) => {
+        dispatch(Actions.saveAudio(res.data));
+      }).catch((err: AxiosError) => {
+        console.log(err);
+      }).then(() => dispatch(Actions.showSpinner(false)));
     },
     deleteAudio: (audio: Audio): void => {
       dispatch(Actions.showSpinner(true));
@@ -95,7 +104,6 @@ class AudioListSmart extends React.Component<ThisProps, ThisState> {
                       onEditTitleChange={this.handleEditTitleChange}
                       onEditAuthorChange={this.handleEditAuthorChange}
                       onEditLyricsChange={this.handleEditLyricsChange}
-                      onEditCoverArtChange={this.handleEditCoverArtChange}
                       onEditAudioSave={this.handleEditAudioSave}/>;
   }
 
@@ -136,8 +144,7 @@ class AudioListSmart extends React.Component<ThisProps, ThisState> {
       editAudio: {
         title: '',
         author: '',
-        lyrics: '',
-        coverArt: undefined
+        lyrics: ''
       }
     });
   };
@@ -160,17 +167,8 @@ class AudioListSmart extends React.Component<ThisProps, ThisState> {
     });
   };
 
-  private handleEditCoverArtChange = (e: any): void => {
-    if (!e.target || !e.target.files || !e.target.files[0]) {
-      return;
-    }
-    this.setState({
-      editAudio: {...this.state.editAudio, coverArt: e.target.files[0]}
-    });
-  };
-
   private handleEditAudioSave = (): void => {
-    console.log(this.state.editAudio);
+    this.props.saveAudio!(this.state.editAudio);
   };
 }
 

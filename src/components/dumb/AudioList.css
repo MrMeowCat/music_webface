@@ -226,34 +226,12 @@
   outline: 0;
   transition: all 0.2s ease;
 }
-.form-input input[type="button"] {
-  width: auto;
-  min-width: 100px;
-  padding: 8px;
-  background: #e3e3e3;
-  border: 1px solid #ccc;
-  border-radius: 2px;
-  font-size: 0.75em;
-  font-weight: 600;
-  color: #333;
-  text-transform: uppercase;
-  transition: all 0.1s ease;
-  cursor: pointer;
-}
-.form-input input[type="button"] ~ p {
-  padding-left: 20px;
-  color: #111;
-  font-size: 0.9em;
-}
 .form-input textarea {
   resize: none;
 }
 .form-input input[type="text"]:hover, .form-input textarea:hover,
 .form-input input[type="text"]:focus, .form-input textarea:focus {
   border-color: #339f74;
-}
-.form-input input[type="button"]:hover {
-  background: #cfcfcf;
 }
 .edit-footer {
   border-top: 1px solid #ddd;

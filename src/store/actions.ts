@@ -28,6 +28,11 @@ interface SearchAudiosAction {
   readonly payload: SearchResult;
 }
 
+interface SaveAudioAction {
+  readonly type: ActionKeys.SAVE_AUDIO;
+  readonly payload: Audio;
+}
+
 interface DeleteAudioAction {
   readonly type: ActionKeys.DELETE_AUDIO;
   readonly payload: Audio;
@@ -61,6 +66,7 @@ export type ActionTypes =
   | LogoutAction
   | GetAudiosAction
   | SearchAudiosAction
+  | SaveAudioAction
   | DeleteAudioAction
   | SwitchActiveAudioAction
   | SwitchShuffleAction
@@ -75,6 +81,7 @@ export enum ActionKeys {
   LOGOUT = 'LOGOUT',
   GET_AUDIOS = 'GET_AUDIOS',
   SEARCH_AUDIOS = 'SEARCH_AUDIOS',
+  SAVE_AUDIO = 'SAVE_AUDIO',
   DELETE_AUDIO = 'DELETE_AUDIO',
   SWITCH_ACTIVE_AUDIO = 'SWITCH_ACTIVE_AUDIO',
   SWITCH_SHUFFLE = 'SWITCH_SHUFFLE',
@@ -101,6 +108,9 @@ export namespace Actions {
   };
   export const searchAudios = (result: SearchResult): SearchAudiosAction => {
     return {type: ActionKeys.SEARCH_AUDIOS, payload: result};
+  };
+  export const saveAudio = (audio: Audio): SaveAudioAction => {
+    return {type: ActionKeys.SAVE_AUDIO, payload: audio};
   };
   export const deleteAudio = (audio: Audio): DeleteAudioAction => {
     return {type: ActionKeys.DELETE_AUDIO, payload: audio};

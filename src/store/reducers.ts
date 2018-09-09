@@ -24,6 +24,17 @@ const audioListReducer: Reducer<AudioListState> = (state: AudioListState = initA
       return {...state, audios: action.payload};
     case ActionKeys.SEARCH_AUDIOS:
       return {...state, searchResult: action.payload};
+    case ActionKeys.SAVE_AUDIO: {
+      const audios: Audio[] = state.audios;
+      for (const audio of audios) {
+        if (audio.id === action.payload.id) {
+          audio.title = action.payload.title;
+          audio.author = action.payload.author;
+          audio.lyrics = action.payload.lyrics;
+        }
+      }
+      return {...state, audios};
+    }
     case ActionKeys.DELETE_AUDIO: {
       const audios: Audio[] = state.audios.filter((audio: Audio) => audio.id !== action.payload.id);
       const activeAudio: Audio = action.payload.id === state.activeAudio.id ? {} : state.activeAudio;

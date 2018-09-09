@@ -2,7 +2,7 @@ import 'components/dumb/AudioList.css';
 import { AudioListSpinner } from 'components/dumb/AudioListSpinner';
 import { Audio } from 'models';
 import * as React from 'react';
-import { ReactNode, RefObject } from 'react';
+import { ReactNode } from 'react';
 import { audioService, SearchRecord, SearchResult } from 'services';
 
 interface ThisProps {
@@ -13,7 +13,7 @@ interface ThisProps {
   repeat: boolean;
   spinner: boolean;
   editMode: boolean;
-  editAudio: Audio & {coverArt?: File};
+  editAudio: Audio;
   onActivePlayClick: () => any;
   onShuffleClick: () => any;
   onRepeatClick: () => any;
@@ -24,7 +24,6 @@ interface ThisProps {
   onEditTitleChange: (e: any) => any;
   onEditAuthorChange: (e: any) => any;
   onEditLyricsChange: (e: any) => any;
-  onEditCoverArtChange: (e: any) => any;
   onEditAudioSave: () => any;
 }
 
@@ -147,8 +146,6 @@ export class AudioList extends React.Component<ThisProps> {
   };
 
   private renderEditWrapper = (): ReactNode => {
-    const coverUploadRef: RefObject<HTMLInputElement> = React.createRef();
-    const openCoverUpload = (): void => coverUploadRef.current!.click();
     return (
       <div className={'edit-wrapper'}
            style={{display: this.props.editMode ? 'flex' : 'none'}}
@@ -173,19 +170,10 @@ export class AudioList extends React.Component<ThisProps> {
                      value={this.props.editAudio.author}
                      onChange={this.props.onEditAuthorChange}/>
             </div>
-            <div className={'form-input mb20'}>
+            <div className={'form-input'}>
               <textarea placeholder={'Lyrics'}
                         value={this.props.editAudio.lyrics}
                         onChange={this.props.onEditLyricsChange}/>
-            </div>
-            <div className={'form-input flex-a'}>
-              <input type={'button'} value={'Cover Art'} onClick={openCoverUpload}/>
-              <p>{this.props.editAudio.coverArt ? this.props.editAudio.coverArt.name : 'No files...'}</p>
-              <input ref={coverUploadRef}
-                     type={'file'}
-                     accept={'image/*'}
-                     style={{display: 'none'}}
-                     onChange={this.props.onEditCoverArtChange}/>
             </div>
           </div>
           <div className={'edit-footer flex p20'}>
