@@ -29,9 +29,9 @@ export class Home extends React.Component<{}, ThisState> {
   public render(): ReactNode {
     return (
       <div>
-        <NavSmart/>
+        {React.createElement(NavSmart)}
         <div style={{paddingTop: this.state.contentPadding}} className={'pl30 pr30 flex-c'}>
-          <AudioListSmart/>
+          {React.createElement(AudioListSmart)}
         </div>
       </div>
     );

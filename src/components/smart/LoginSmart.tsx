@@ -10,12 +10,12 @@ import { Actions, ActionTypes } from 'store/actions';
 import { State } from 'store/states';
 
 interface ThisProps {
-  loggedIn?: boolean;
-  pending?: boolean;
-  error?: boolean;
-  loginPending?: () => any;
-  loginSuccess?: () => any;
-  loginFailed?: () => any;
+  loggedIn: boolean;
+  pending: boolean;
+  error: boolean;
+  loginPending: () => any;
+  loginSuccess: () => any;
+  loginFailed: () => any;
 }
 
 interface ThisState {
@@ -50,10 +50,10 @@ class LoginSmart extends React.Component<ThisProps, ThisState> {
   }
 
   public render(): ReactNode {
-    return this.props.loggedIn! ?
+    return this.props.loggedIn ?
       <Redirect to={'/'}/> :
-      <Login pending={this.props.pending!}
-             error={this.props.error!}
+      <Login pending={this.props.pending}
+             error={this.props.error}
              onUsernameChange={this.handleUsernameChange}
              onPasswordChange={this.handlePasswordChange}
              onLoginClick={this.handleLoginClick}/>;
@@ -64,13 +64,13 @@ class LoginSmart extends React.Component<ThisProps, ThisState> {
   private handlePasswordChange = (e: any): void => this.setState({password: e.target.value});
 
   private handleLoginClick = (): void => {
-    this.props.loginPending!();
+    this.props.loginPending();
     authService.login(this.state.username, this.state.password)
       .then((res: AxiosResponse) => {
-        this.props.loginSuccess!();
+        this.props.loginSuccess();
       })
       .catch((err: AxiosError) => {
-        this.props.loginFailed!();
+        this.props.loginFailed();
       });
   };
 }

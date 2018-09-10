@@ -59,7 +59,7 @@ export class AudioList extends React.Component<ThisProps> {
             {this.props.activeAudio.id ? this.getTitleOrDefault(this.props.activeAudio) : ''}
             <p>{this.props.activeAudio.id ? this.getAuthorOrDefault(this.props.activeAudio) : ''}</p>
           </h2>
-          <PlaybackSmart/>
+          {React.createElement(PlaybackSmart)}
         </div>
       </div>
     );

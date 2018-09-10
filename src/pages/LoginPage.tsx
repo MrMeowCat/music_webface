@@ -5,7 +5,7 @@ import * as React from 'react';
 export class LoginPage extends React.Component {
 
   public render(): ReactNode {
-    return <LoginSmart/>
+    return React.createElement(LoginSmart);
   }
 
 }

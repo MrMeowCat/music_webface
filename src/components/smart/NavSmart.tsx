@@ -10,11 +10,11 @@ import { Actions, ActionTypes } from 'store/actions';
 import { State } from 'store/states';
 
 interface ThisProps {
-  audios?: Audio[];
-  getAudios?: () => any;
-  searchAudios?: (audios: Audio[], query: string) => any;
-  upload?: (fileUploadInput: HTMLInputElement) => any;
-  logout?: () => any;
+  audios: Audio[];
+  getAudios: () => any;
+  searchAudios: (audios: Audio[], query: string) => any;
+  upload: (fileUploadInput: HTMLInputElement) => any;
+  logout: () => any;
 }
 
 const mapState2Props = (state: State): any => {
@@ -74,7 +74,7 @@ class NavSmart extends React.Component<ThisProps> {
 
   public constructor(props: ThisProps) {
     super(props);
-    this.props.getAudios!();
+    this.props.getAudios();
   }
 
   public render(): ReactNode {
@@ -92,7 +92,7 @@ class NavSmart extends React.Component<ThisProps> {
   }
 
   private handleSearchQueryChange = (e: any): void => {
-    this.props.searchAudios!(this.props.audios!, e.target.value);
+    this.props.searchAudios(this.props.audios, e.target.value);
   };
 
   private handleUploadClick = (): void => {
@@ -100,11 +100,11 @@ class NavSmart extends React.Component<ThisProps> {
     if (!fileUploadInput) {
       return;
     }
-    this.props.upload!(fileUploadInput);
+    this.props.upload(fileUploadInput);
   };
 
   private handleLogoutClick = (): void => {
-    this.props.logout!();
+    this.props.logout();
   };
 }
 

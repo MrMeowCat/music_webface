@@ -10,13 +10,13 @@ import { Actions, ActionTypes } from 'store/actions';
 import { State } from 'store/states';
 
 interface ThisProps {
-  audios?: Audio[];
-  searchResult?: SearchResult;
-  activeAudio?: Audio;
-  spinner?: boolean;
-  switchActiveAudio?: (audio: Audio, playing: boolean) => any;
-  saveAudio?: (audio: Audio) => any;
-  deleteAudio?: (audio: Audio) => any;
+  audios: Audio[];
+  searchResult: SearchResult;
+  activeAudio: Audio;
+  spinner: boolean;
+  switchActiveAudio: (audio: Audio, playing: boolean) => any;
+  saveAudio: (audio: Audio) => any;
+  deleteAudio: (audio: Audio) => any;
 }
 
 interface ThisState {
@@ -80,10 +80,10 @@ class AudioListSmart extends React.Component<ThisProps, ThisState> {
   }
 
   public render(): ReactNode {
-    return <AudioList audios={this.props.audios!}
-                      searchResult={this.props.searchResult!}
-                      activeAudio={this.props.activeAudio!}
-                      spinner={this.props.spinner!}
+    return <AudioList audios={this.props.audios}
+                      searchResult={this.props.searchResult}
+                      activeAudio={this.props.activeAudio}
+                      spinner={this.props.spinner}
                       activeLyrics={this.state.activeLyrics}
                       editMode={this.state.editMode}
                       editAudio={this.state.editAudio}
@@ -100,15 +100,15 @@ class AudioListSmart extends React.Component<ThisProps, ThisState> {
   }
 
   private handleItemPlayClick = (audio: Audio, e: any): void => {
-    if (audio.id === this.props.activeAudio!.id) {
-      this.props.switchActiveAudio!(audio, !audio.playing);
+    if (audio.id === this.props.activeAudio.id) {
+      this.props.switchActiveAudio(audio, !audio.playing);
       return;
     }
-    this.props.switchActiveAudio!(audio, true);
+    this.props.switchActiveAudio(audio, true);
   };
 
   private handleItemDeleteClick = (audio: Audio): void => {
-    this.props.deleteAudio!(audio);
+    this.props.deleteAudio(audio);
   };
 
   private handleLyricsWrapperShow = (audio: Audio): void => {
@@ -169,7 +169,7 @@ class AudioListSmart extends React.Component<ThisProps, ThisState> {
   };
 
   private handleEditAudioSave = (): void => {
-    this.props.saveAudio!(this.state.editAudio);
+    this.props.saveAudio(this.state.editAudio);
   };
 }
 

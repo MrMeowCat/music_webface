@@ -9,13 +9,13 @@ import { Actions, ActionTypes } from 'store/actions';
 import { State } from 'store/states';
 
 interface ThisProps {
-  audios?: Audio[];
-  activeAudio?: Audio;
-  shuffle?: boolean;
-  repeat?: boolean;
-  switchActiveAudio?: (audio: Audio, playing: boolean) => any;
-  switchShuffle?: (shuffle: boolean) => any;
-  switchRepeat?: (repeat: boolean) => any;
+  audios: Audio[];
+  activeAudio: Audio;
+  shuffle: boolean;
+  repeat: boolean;
+  switchActiveAudio: (audio: Audio, playing: boolean) => any;
+  switchShuffle: (shuffle: boolean) => any;
+  switchRepeat: (repeat: boolean) => any;
 }
 
 const mapState2Props = (state: State): any => {
@@ -47,9 +47,9 @@ class PlaybackSmart extends React.Component<ThisProps> {
 
   public render(): ReactNode {
     return (
-      <Playback activeAudio={this.props.activeAudio!}
-                shuffle={this.props.shuffle!}
-                repeat={this.props.repeat!}
+      <Playback activeAudio={this.props.activeAudio}
+                shuffle={this.props.shuffle}
+                repeat={this.props.repeat}
                 onActivePlayClick={this.handleActivePlayClick}
                 onShuffleClick={this.handleShuffleClick}
                 onRepeatClick={this.handleRepeatClick}
@@ -58,15 +58,15 @@ class PlaybackSmart extends React.Component<ThisProps> {
   }
 
   private handleActivePlayClick = (): void => {
-    this.props.switchActiveAudio!(this.props.activeAudio!, !this.props.activeAudio!.playing);
+    this.props.switchActiveAudio(this.props.activeAudio, !this.props.activeAudio.playing);
   };
 
   private handleShuffleClick = (): void => {
-    this.props.switchShuffle!(!this.props.shuffle);
+    this.props.switchShuffle(!this.props.shuffle);
   };
 
   private handleRepeatClick = (): void => {
-    this.props.switchRepeat!(!this.props.repeat);
+    this.props.switchRepeat(!this.props.repeat);
   };
 }
 
