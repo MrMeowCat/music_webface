@@ -172,7 +172,7 @@
 .audio-options button:last-of-type:hover i {
   color: #e50000;
 }
-.edit-wrapper {
+.wrapper {
   position: fixed;
   top: 0;
   left: 0;
@@ -183,31 +183,53 @@
   background: rgba(0,0,0,0.5);
   z-index: 13;
 }
-.edit {
+.form {
   background: #fafafa;
-  width: 500px;
   border-radius: 2px;
   box-shadow: 0 1px 2px 0 rgba(0,0,0,.2);
 }
-.edit-header {
+.form.lyrics {
+  width: 550px;
+}
+.form.lyrics .form-body {
+  max-height: 400px;
+  overflow-y: auto;
+}
+.form.lyrics .form-body p {
+  font-size: 0.9em;
+  color: #333;
+}
+.form.lyrics .form-body p span {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 1.2em;
+  font-weight: 600;
+  color: #888;
+  margin: 25px 0;
+}
+.form.edit {
+  width: 500px;
+}
+.form-header {
   border-bottom: 1px solid #ddd;
 }
-.edit-header p {
+.form-header p {
   font-size: 1.1em;
   font-weight: 600;
   color: #444;
 }
-.edit-header button {
+.form-header button {
   background: transparent;
   border: none;
   font-size: 1.2em;
   color: #999;
   transition: all 0.2s ease;
 }
-.edit-header button:hover {
+.form-header button:hover {
   color: #339f74;
 }
-.edit-body {
+.form-body {
   width: 100%;
 }
 .form-input {
@@ -233,11 +255,11 @@
 .form-input input[type="text"]:focus, .form-input textarea:focus {
   border-color: #339f74;
 }
-.edit-footer {
+.form-footer {
   border-top: 1px solid #ddd;
   justify-content: flex-end;
 }
-.edit-footer button {
+.form-footer button {
   min-width: 100px;
   padding: 12px;
   background: #e3e3e3;
@@ -249,15 +271,15 @@
   text-transform: uppercase;
   transition: all 0.1s ease;
 }
-.edit-footer button:hover {
+.form-footer button:hover {
   background: #cfcfcf;
 }
-.edit-footer .submit-btn {
+.form-footer .submit-btn {
   background: #3abe8c;
   border: 1px solid #339f74;
   color: #fff;
 }
-.edit-footer .submit-btn:hover {
+.form-footer .submit-btn:hover {
   background: #339f74;
 }
 

@@ -26,6 +26,7 @@ interface ThisProps {
 interface ThisState {
   editMode: boolean;
   editAudio: Audio;
+  activeLyrics: {visible: boolean, audio: Audio}
 }
 
 const mapState2Props = (state: State) => {
@@ -81,6 +82,13 @@ class AudioListSmart extends React.Component<ThisProps, ThisState> {
         title: '',
         author: '',
         lyrics: ''
+      },
+      activeLyrics: {
+        visible: false,
+        audio: {
+          title: '',
+          lyrics: ''
+        }
       }
     };
   }
@@ -92,6 +100,7 @@ class AudioListSmart extends React.Component<ThisProps, ThisState> {
                       shuffle={this.props.shuffle!}
                       repeat={this.props.repeat!}
                       spinner={this.props.spinner!}
+                      activeLyrics={this.state.activeLyrics}
                       editMode={this.state.editMode}
                       editAudio={this.state.editAudio}
                       onActivePlayClick={this.handleActivePlayClick}
@@ -99,6 +108,8 @@ class AudioListSmart extends React.Component<ThisProps, ThisState> {
                       onRepeatClick={this.handleRepeatClick}
                       onItemPlayClick={this.handleItemPlayClick}
                       onItemDeleteClick={this.handleItemDeleteClick}
+                      onLyricsWrapperShow={this.handleLyricsWrapperShow}
+                      onLyricsWrapperHide={this.handleLyricsWrapperHide}
                       onEditWrapperShow={this.handleEditWrapperShow}
                       onEditWrapperHide={this.handleEditWrapperHide}
                       onEditTitleChange={this.handleEditTitleChange}
@@ -129,6 +140,27 @@ class AudioListSmart extends React.Component<ThisProps, ThisState> {
 
   private handleItemDeleteClick = (audio: Audio): void => {
     this.props.deleteAudio!(audio);
+  };
+
+  private handleLyricsWrapperShow = (audio: Audio): void => {
+    this.setState({
+      activeLyrics: {
+        visible: true,
+        audio
+      }
+    });
+  };
+
+  private handleLyricsWrapperHide = (): void => {
+    this.setState({
+      activeLyrics: {
+        visible: false,
+        audio: {
+          title: '',
+          lyrics: ''
+        }
+      }
+    });
   };
 
   private handleEditWrapperShow = (audio: Audio): void => {

@@ -12,6 +12,7 @@ interface ThisProps {
   shuffle: boolean;
   repeat: boolean;
   spinner: boolean;
+  activeLyrics: {visible: boolean, audio: Audio}
   editMode: boolean;
   editAudio: Audio;
   onActivePlayClick: () => any;
@@ -19,6 +20,8 @@ interface ThisProps {
   onRepeatClick: () => any;
   onItemPlayClick: (audio: Audio, e: any) => any;
   onItemDeleteClick: (audio: Audio) => any;
+  onLyricsWrapperShow: (audio: Audio) => any;
+  onLyricsWrapperHide: () => any;
   onEditWrapperShow: (audio: Audio) => any;
   onEditWrapperHide: () => any;
   onEditTitleChange: (e: any) => any;
@@ -45,6 +48,7 @@ export class AudioList extends React.Component<ThisProps> {
             </div>
           </div>
         }
+        {this.renderLyricsWrapper()}
         {this.renderEditWrapper()}
       </div>
     );
@@ -61,9 +65,6 @@ export class AudioList extends React.Component<ThisProps> {
           </h2>
           <div className={this.props.activeAudio.id ? 'controls flex' : ' controls flex disabled'}>
             <div className={'control-buttons'}>
-              <button disabled={!this.props.activeAudio.id}>
-                <i className={'far fa-comment'}/>
-              </button>
               <button disabled={!this.props.activeAudio.id}
                       className={this.props.shuffle ? 'active' : ''}
                       onClick={this.props.onShuffleClick}
@@ -105,6 +106,9 @@ export class AudioList extends React.Component<ThisProps> {
             </div>
             <div className={'audio-options flex-m'}>
               <p>{this.getDuration(audio)}</p>
+              <button onClick={this.props.onLyricsWrapperShow.bind(this, audio)}>
+                <i className={'far fa-comment'}/>
+              </button>
               <button onClick={this.props.onEditWrapperShow.bind(this, audio)}>
                 <i className={'fas fa-edit'}/>
               </button>
@@ -145,19 +149,48 @@ export class AudioList extends React.Component<ThisProps> {
     return record.inTitle ? highlightTitle() : highlightAuthor();
   };
 
+  private renderLyricsWrapper = (): ReactNode => {
+    return (
+      <div className={'wrapper lyrics-wrapper'}
+           style={{display: this.props.activeLyrics.visible ? 'flex' : 'none'}}
+           onClick={this.hideLyricsWrapper}>
+        <div className={'form lyrics'}>
+          <div className={'form-header flex-b p20'}>
+            <p>{this.getTitleOrDefault(this.props.activeLyrics.audio)}</p>
+            <button onClick={this.hideLyricsWrapper}>
+              <i className={'fas fa-times'}/>
+            </button>
+          </div>
+          <div className={'form-body p20'}>
+            <p>
+              {
+                this.props.activeLyrics.audio.lyrics ?
+                  this.props.activeLyrics.audio.lyrics :
+                  <span>No lyrics found...</span>
+              }
+              </p>
+          </div>
+          <div className={'form-footer flex p20'}>
+            <button onClick={this.hideLyricsWrapper}>Close</button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   private renderEditWrapper = (): ReactNode => {
     return (
-      <div className={'edit-wrapper'}
+      <div className={'wrapper edit-wrapper'}
            style={{display: this.props.editMode ? 'flex' : 'none'}}
            onClick={this.hideEditWrapper}>
-        <div className={'edit'}>
-          <div className={'edit-header flex-b p20'}>
+        <div className={'form edit'}>
+          <div className={'form-header flex-b p20'}>
             <p>Edit Audio</p>
             <button onClick={this.hideEditWrapper}>
               <i className={'fas fa-times'}/>
             </button>
           </div>
-          <div className={'edit-body p20'}>
+          <div className={'form-body p20'}>
             <div className={'form-input mb20'}>
               <input type={'text'}
                      placeholder={'Title'}
@@ -176,7 +209,7 @@ export class AudioList extends React.Component<ThisProps> {
                         onChange={this.props.onEditLyricsChange}/>
             </div>
           </div>
-          <div className={'edit-footer flex p20'}>
+          <div className={'form-footer flex p20'}>
             <button className={'cancel-btn'} onClick={this.hideEditWrapper}>Cancel</button>
             <button className={'submit-btn ml20'} onClick={this.saveEditForm}>Save</button>
           </div>
@@ -206,6 +239,13 @@ export class AudioList extends React.Component<ThisProps> {
     const seconds: number = duration % 60;
     const secondsString: string = seconds > 9 ? seconds.toString() : `0${seconds}`;
     return `${minutes}:${secondsString}`;
+  };
+
+  private hideLyricsWrapper = (e: any): void => {
+    const tagName: string = e.target.tagName.toLowerCase();
+    if (e.target.classList.contains('lyrics-wrapper') || tagName === 'button' || tagName === 'i') {
+      this.props.onLyricsWrapperHide();
+    }
   };
 
   private hideEditWrapper = (e: any): void => {
