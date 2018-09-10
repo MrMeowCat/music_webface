@@ -13,12 +13,8 @@ interface ThisProps {
   audios?: Audio[];
   searchResult?: SearchResult;
   activeAudio?: Audio;
-  shuffle?: boolean;
-  repeat?: boolean;
   spinner?: boolean;
-  switchActiveAudio: (audio: Audio, playing: boolean) => any;
-  switchShuffle: (shuffle: boolean) => any;
-  switchRepeat: (repeat: boolean) => any;
+  switchActiveAudio?: (audio: Audio, playing: boolean) => any;
   saveAudio?: (audio: Audio) => any;
   deleteAudio?: (audio: Audio) => any;
 }
@@ -34,8 +30,6 @@ const mapState2Props = (state: State): any => {
     audios: state.audioListState.audios,
     searchResult: state.audioListState.searchResult,
     activeAudio: state.audioListState.activeAudio,
-    shuffle: state.audioListState.shuffle,
-    repeat: state.audioListState.repeat,
     spinner: state.audioListState.spinner
   };
 };
@@ -44,14 +38,6 @@ const mapDispatch2Props = (dispatch: Dispatch<ActionTypes>): any => {
   return {
     switchActiveAudio: (audio: Audio, playing: boolean): void => {
       dispatch(Actions.switchActiveAudio(audio, playing));
-    },
-    switchShuffle: (shuffle: boolean): void => {
-      audioService.saveShuffleSettings(shuffle);
-      dispatch(Actions.switchShuffle(shuffle));
-    },
-    switchRepeat: (repeat: boolean): void => {
-      audioService.saveRepeatSettings(repeat);
-      dispatch(Actions.switchRepeat(repeat));
     },
     saveAudio: (audio: Audio): void => {
       dispatch(Actions.showSpinner(true));
@@ -97,15 +83,10 @@ class AudioListSmart extends React.Component<ThisProps, ThisState> {
     return <AudioList audios={this.props.audios!}
                       searchResult={this.props.searchResult!}
                       activeAudio={this.props.activeAudio!}
-                      shuffle={this.props.shuffle!}
-                      repeat={this.props.repeat!}
                       spinner={this.props.spinner!}
                       activeLyrics={this.state.activeLyrics}
                       editMode={this.state.editMode}
                       editAudio={this.state.editAudio}
-                      onActivePlayClick={this.handleActivePlayClick}
-                      onShuffleClick={this.handleShuffleClick}
-                      onRepeatClick={this.handleRepeatClick}
                       onItemPlayClick={this.handleItemPlayClick}
                       onItemDeleteClick={this.handleItemDeleteClick}
                       onLyricsWrapperShow={this.handleLyricsWrapperShow}
@@ -118,24 +99,12 @@ class AudioListSmart extends React.Component<ThisProps, ThisState> {
                       onEditAudioSave={this.handleEditAudioSave}/>;
   }
 
-  private handleActivePlayClick = (): void => {
-    this.props.switchActiveAudio(this.props.activeAudio!, !this.props.activeAudio!.playing);
-  };
-
-  private handleShuffleClick = (): void => {
-    this.props.switchShuffle(!this.props.shuffle);
-  };
-
-  private handleRepeatClick = (): void => {
-    this.props.switchRepeat(!this.props.repeat);
-  };
-
   private handleItemPlayClick = (audio: Audio, e: any): void => {
     if (audio.id === this.props.activeAudio!.id) {
-      this.props.switchActiveAudio(audio, !audio.playing);
+      this.props.switchActiveAudio!(audio, !audio.playing);
       return;
     }
-    this.props.switchActiveAudio(audio, true);
+    this.props.switchActiveAudio!(audio, true);
   };
 
   private handleItemDeleteClick = (audio: Audio): void => {
