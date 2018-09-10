@@ -17,13 +17,13 @@ interface ThisProps {
   logout?: () => any;
 }
 
-const mapState2Props: any = (state: State): any => {
+const mapState2Props = (state: State): any => {
   return {
     audios: state.audioListState.audios
   }
 };
 
-const mapDispatch2Props: any = (dispatch: Dispatch<ActionTypes>): any => {
+const mapDispatch2Props = (dispatch: Dispatch<ActionTypes>): any => {
   const getAudios = (): void => {
     dispatch(Actions.showSpinner(true));
     audioService.getAll().then((res: AxiosResponse) => {

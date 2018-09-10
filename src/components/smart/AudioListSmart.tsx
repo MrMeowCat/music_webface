@@ -29,7 +29,7 @@ interface ThisState {
   activeLyrics: {visible: boolean, audio: Audio}
 }
 
-const mapState2Props = (state: State) => {
+const mapState2Props = (state: State): any => {
   return {
     audios: state.audioListState.audios,
     searchResult: state.audioListState.searchResult,
@@ -40,7 +40,7 @@ const mapState2Props = (state: State) => {
   };
 };
 
-const mapDispatch2Props = (dispatch: Dispatch<ActionTypes>) => {
+const mapDispatch2Props = (dispatch: Dispatch<ActionTypes>): any => {
   return {
     switchActiveAudio: (audio: Audio, playing: boolean): void => {
       dispatch(Actions.switchActiveAudio(audio, playing));

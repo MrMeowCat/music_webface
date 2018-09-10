@@ -23,7 +23,7 @@ interface ThisState {
   password: string;
 }
 
-const mapState2Props = (state: State) => {
+const mapState2Props = (state: State): any => {
   return {
     loggedIn: state.authState.loggedIn,
     pending: state.authState.pending,
@@ -31,7 +31,7 @@ const mapState2Props = (state: State) => {
   };
 };
 
-const mapDispatch2Props = (dispatch: Dispatch<ActionTypes>) => {
+const mapDispatch2Props = (dispatch: Dispatch<ActionTypes>): any => {
   return {
     loginPending: () => dispatch(Actions.loginPending()),
     loginSuccess: () => dispatch(Actions.loginSuccess()),

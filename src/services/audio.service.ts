@@ -1,8 +1,8 @@
 import { AxiosResponse } from 'axios';
 import { Audio } from 'models';
+import { storageService } from 'services';
 import { authService } from 'services/auth.service';
 import { HttpService } from 'services/http.service';
-import { storageService } from 'services/index';
 
 export interface SearchResult {
   records: SearchRecord[];
