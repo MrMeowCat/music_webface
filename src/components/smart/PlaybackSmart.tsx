@@ -1,24 +1,22 @@
 import { Playback } from 'components/dumb';
 import { Audio } from 'models';
-import { ReactNode } from 'react';
 import * as React from 'react';
+import { ReactNode } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { audioService } from 'services';
+import { playbackService } from 'services';
 import { Actions, ActionTypes } from 'store/actions';
 import { State } from 'store/states';
 
 interface ThisProps {
   audios: Audio[];
   activeAudio: Audio;
-  shuffle: boolean;
-  repeat: boolean;
   switchActiveAudio: (audio: Audio, playing: boolean) => any;
-  switchShuffle: (shuffle: boolean) => any;
-  switchRepeat: (repeat: boolean) => any;
 }
 
 interface ThisState {
+  shuffle: boolean;
+  repeat: boolean;
   time: number;
   volume: number;
   volumePopup: boolean;
@@ -28,8 +26,6 @@ const mapState2Props = (state: State): any => {
   return {
     audios: state.audioListState.audios,
     activeAudio: state.audioListState.activeAudio,
-    shuffle: state.audioListState.shuffle,
-    repeat: state.audioListState.repeat,
   };
 };
 
@@ -37,14 +33,6 @@ const mapDispatch2Props = (dispatch: Dispatch<ActionTypes>): any => {
   return {
     switchActiveAudio: (audio: Audio, playing: boolean): void => {
       dispatch(Actions.switchActiveAudio(audio, playing));
-    },
-    switchShuffle: (shuffle: boolean): void => {
-      audioService.saveShuffleSettings(shuffle);
-      dispatch(Actions.switchShuffle(shuffle));
-    },
-    switchRepeat: (repeat: boolean): void => {
-      audioService.saveRepeatSettings(repeat);
-      dispatch(Actions.switchRepeat(repeat));
     }
   };
 };
@@ -54,8 +42,10 @@ class PlaybackSmart extends React.Component<ThisProps, ThisState> {
   public constructor(props: ThisProps) {
     super(props);
     this.state = {
+      shuffle: playbackService.getShuffleSettings(),
+      repeat: playbackService.getRepeatSettings(),
       time: 0,
-      volume: 0,
+      volume: playbackService.getVolumeSettings(),
       volumePopup: false
     }
   }
@@ -64,8 +54,8 @@ class PlaybackSmart extends React.Component<ThisProps, ThisState> {
   public render(): ReactNode {
     return (
       <Playback activeAudio={this.props.activeAudio}
-                shuffle={this.props.shuffle}
-                repeat={this.props.repeat}
+                shuffle={this.state.shuffle}
+                repeat={this.state.repeat}
                 time={this.state.time}
                 volume={this.state.volume}
                 volumePopup={this.state.volumePopup}
@@ -85,11 +75,17 @@ class PlaybackSmart extends React.Component<ThisProps, ThisState> {
   };
 
   private handleShuffleClick = (): void => {
-    this.props.switchShuffle(!this.props.shuffle);
+    playbackService.saveShuffleSettings(!this.state.shuffle);
+    this.setState({
+      shuffle: !this.state.shuffle
+    });
   };
 
   private handleRepeatClick = (): void => {
-    this.props.switchRepeat(!this.props.repeat);
+    playbackService.saveRepeatSettings(!this.state.repeat);
+    this.setState({
+      repeat: !this.state.repeat
+    });
   };
 
   private handleTimelineBeforeChange = (): void => {
@@ -101,6 +97,7 @@ class PlaybackSmart extends React.Component<ThisProps, ThisState> {
   };
 
   private handleVolumeChange = (volume: number): void => {
+    playbackService.saveVolumeSettings(volume);
     this.setState({volume});
   };
 

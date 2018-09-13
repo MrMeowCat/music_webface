@@ -1,6 +1,5 @@
 import { AxiosResponse } from 'axios';
 import { Audio } from 'models';
-import { storageService } from 'services';
 import { authService } from 'services/auth.service';
 import { HttpService } from 'services/http.service';
 
@@ -19,8 +18,6 @@ class AudioService extends HttpService {
   private static AUDIO_URL: string = '/api/audio';
   private static COVER_ART_URL: string = '/api/audio/cover';
   private static AUDIO_FILE_URL: string = '/api/audio/file';
-  private static SHUFFLE_KEY: string = 'shuffle';
-  private static REPEAT_KEY: string = 'repeat';
 
   public getAll = (): Promise<AxiosResponse> => {
     return this.get(AudioService.AUDIO_URL, {
@@ -86,22 +83,6 @@ class AudioService extends HttpService {
 
   public getAudioFileUrl = (file: string): string => {
     return `${HttpService.DOMAIN}${AudioService.AUDIO_FILE_URL}/${file}`;
-  };
-
-  public getShuffleSettings = (): boolean => {
-    return storageService.get(AudioService.SHUFFLE_KEY) === 'true';
-  };
-
-  public getRepeatSettings = (): boolean => {
-    return storageService.get(AudioService.REPEAT_KEY) === 'true';
-  };
-
-  public saveShuffleSettings = (shuffle: boolean): void => {
-    storageService.save(AudioService.SHUFFLE_KEY, shuffle);
-  };
-
-  public saveRepeatSettings = (repeat: boolean): void => {
-    storageService.save(AudioService.REPEAT_KEY, repeat);
   };
 }
 
