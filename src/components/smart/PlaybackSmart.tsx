@@ -18,6 +18,12 @@ interface ThisProps {
   switchRepeat: (repeat: boolean) => any;
 }
 
+interface ThisState {
+  time: number;
+  volume: number;
+  volumePopup: boolean;
+}
+
 const mapState2Props = (state: State): any => {
   return {
     audios: state.audioListState.audios,
@@ -43,16 +49,33 @@ const mapDispatch2Props = (dispatch: Dispatch<ActionTypes>): any => {
   };
 };
 
-class PlaybackSmart extends React.Component<ThisProps> {
+class PlaybackSmart extends React.Component<ThisProps, ThisState> {
+
+  public constructor(props: ThisProps) {
+    super(props);
+    this.state = {
+      time: 0,
+      volume: 0,
+      volumePopup: false
+    }
+  }
+
 
   public render(): ReactNode {
     return (
       <Playback activeAudio={this.props.activeAudio}
                 shuffle={this.props.shuffle}
                 repeat={this.props.repeat}
+                time={this.state.time}
+                volume={this.state.volume}
+                volumePopup={this.state.volumePopup}
                 onActivePlayClick={this.handleActivePlayClick}
                 onShuffleClick={this.handleShuffleClick}
                 onRepeatClick={this.handleRepeatClick}
+                onTimelineBeforeChange={this.handleTimelineBeforeChange}
+                onTimelineAfterChange={this.handleTimelineAfterChange}
+                onVolumeChange={this.handleVolumeChange}
+                onVolumePopupClick={this.handleVolumePopupClick}
       />
     );
   }
@@ -68,6 +91,20 @@ class PlaybackSmart extends React.Component<ThisProps> {
   private handleRepeatClick = (): void => {
     this.props.switchRepeat(!this.props.repeat);
   };
+
+  private handleTimelineBeforeChange = (): void => {
+
+  };
+
+  private handleTimelineAfterChange = (time: number): void => {
+    this.setState({time});
+  };
+
+  private handleVolumeChange = (volume: number): void => {
+    this.setState({volume});
+  };
+
+  private handleVolumePopupClick = (): void => this.setState({volumePopup: !this.state.volumePopup});
 }
 
 export default connect(mapState2Props, mapDispatch2Props)(PlaybackSmart);
