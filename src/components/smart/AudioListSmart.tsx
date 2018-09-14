@@ -5,7 +5,7 @@ import * as React from 'react';
 import { ReactNode } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { audioService, SearchResult } from 'services';
+import { audioService, playbackService, SearchResult } from 'services';
 import { Actions, ActionTypes } from 'store/actions';
 import { State } from 'store/states';
 
@@ -38,6 +38,7 @@ const mapDispatch2Props = (dispatch: Dispatch<ActionTypes>): any => {
   return {
     switchActiveAudio: (audio: Audio, playing: boolean): void => {
       dispatch(Actions.switchActiveAudio(audio, playing));
+      playbackService.playOrPause(audio);
     },
     saveAudio: (audio: Audio): void => {
       dispatch(Actions.showSpinner(true));

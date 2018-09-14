@@ -1,9 +1,8 @@
 import 'components/dumb/Playback.css';
 import { Audio } from 'models';
-import Slider from 'rc-slider';
-import 'rc-slider/assets/index.css';
 import * as React from 'react';
 import { ReactNode } from 'react';
+import * as ReactSlider from 'react-slider';
 
 interface ThisProps {
   activeAudio: Audio;
@@ -17,6 +16,7 @@ interface ThisProps {
   onRepeatClick: () => any;
   onTimelineBeforeChange: () => any;
   onTimelineAfterChange: (time: number) => any;
+  onTimelineChange: (time: number) => any;
   onVolumeChange: (volume: number) => any;
   onVolumePopupClick: () => any;
 }
@@ -44,26 +44,27 @@ export class Playback extends React.Component<ThisProps> {
           </button>
         </div>
         <div className={'playback flex-m'}>
-          <Slider defaultValue={this.props.time}
-                  min={0}
-                  max={this.props.activeAudio.duration}
-                  disabled={!this.props.activeAudio.id}
-                  className={'slider'}
-                  onBeforeChange={this.props.onTimelineBeforeChange}
-                  onAfterChange={this.props.onTimelineAfterChange}
+          <ReactSlider withBars={true}
+                       value={this.props.time}
+                       min={0}
+                       max={this.props.activeAudio.duration}
+                       disabled={!this.props.activeAudio.id}
+                       onBeforeChange={this.props.onTimelineBeforeChange}
+                       onAfterChange={this.props.onTimelineAfterChange}
+                       onChange={this.props.onTimelineChange}
           />
-          <div className={'sound'}>
-            <div className={'sound-popup p20'}
-                 style={{display: this.props.volumePopup ? 'block' : 'none'}}>
-              <Slider defaultValue={this.props.volume}
-                      min={0}
-                      max={1}
-                      step={0.01}
-                      className={'slider'}
-                      onChange={this.props.onVolumeChange}
+          <div className={'volume'}>
+            <div className={this.props.volumePopup ? 'volume-popup p20' : 'volume-popup p20 hidden'}>
+              <ReactSlider withBars={true}
+                           value={this.props.volume}
+                           min={0}
+                           max={1}
+                           step={0.01}
+                           className={'slider slider-volume'}
+                           onChange={this.props.onVolumeChange}
               />
             </div>
-            <button className={this.props.volumePopup ? 'sound-btn active' : 'sound-btn'}
+            <button className={this.props.volumePopup ? 'volume-btn active' : 'volume-btn'}
                     onClick={this.props.onVolumePopupClick}>
               <i className={'fas fa-volume-up'}/>
             </button>
@@ -72,6 +73,13 @@ export class Playback extends React.Component<ThisProps> {
         </div>
       </div>
     );
+  }
+
+  /**
+   * Triggers resize to fix buggy slider bars.
+   */
+  public componentDidMount(): void {
+    window.dispatchEvent(new Event('resize'));
   }
 
   private renderTime = (): string => {

@@ -17,6 +17,7 @@ interface ThisProps {
 interface ThisState {
   shuffle: boolean;
   repeat: boolean;
+  timelineLocked: boolean;
   time: number;
   volume: number;
   volumePopup: boolean;
@@ -33,6 +34,7 @@ const mapDispatch2Props = (dispatch: Dispatch<ActionTypes>): any => {
   return {
     switchActiveAudio: (audio: Audio, playing: boolean): void => {
       dispatch(Actions.switchActiveAudio(audio, playing));
+      playbackService.playOrPause(audio);
     }
   };
 };
@@ -44,12 +46,21 @@ class PlaybackSmart extends React.Component<ThisProps, ThisState> {
     this.state = {
       shuffle: playbackService.getShuffleSettings(),
       repeat: playbackService.getRepeatSettings(),
+      timelineLocked: false,
       time: 0,
       volume: playbackService.getVolumeSettings(),
       volumePopup: false
-    }
+    };
+    playbackService.setOnPlay(() => {
+      setInterval(() => {
+        if (!this.state.timelineLocked) {
+          this.setState({
+            time: playbackService.getTime()
+          });
+        }
+      }, 1000);
+    });
   }
-
 
   public render(): ReactNode {
     return (
@@ -64,6 +75,7 @@ class PlaybackSmart extends React.Component<ThisProps, ThisState> {
                 onRepeatClick={this.handleRepeatClick}
                 onTimelineBeforeChange={this.handleTimelineBeforeChange}
                 onTimelineAfterChange={this.handleTimelineAfterChange}
+                onTimelineChange={this.handleTimelineChange}
                 onVolumeChange={this.handleVolumeChange}
                 onVolumePopupClick={this.handleVolumePopupClick}
       />
@@ -88,13 +100,14 @@ class PlaybackSmart extends React.Component<ThisProps, ThisState> {
     });
   };
 
-  private handleTimelineBeforeChange = (): void => {
-
-  };
+  private handleTimelineBeforeChange = (): void => this.setState({timelineLocked: true});
 
   private handleTimelineAfterChange = (time: number): void => {
-    this.setState({time});
+    playbackService.setTime(time);
+    this.setState({time, timelineLocked: false});
   };
+
+  private handleTimelineChange = (time: number): void => this.setState({time});
 
   private handleVolumeChange = (volume: number): void => {
     playbackService.saveVolumeSettings(volume);
