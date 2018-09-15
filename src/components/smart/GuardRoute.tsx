@@ -1,3 +1,4 @@
+import { ReactElement } from 'react';
 import * as React from 'react';
 import { ReactNode } from 'react';
 import { connect } from 'react-redux';
@@ -10,7 +11,7 @@ const mapState2Props = (state: State) => {
   };
 };
 
-const GuardRoute: React.StatelessComponent<any> = ({component: Component, loggedIn, ...rest}) => {
+const GuardRoute: React.StatelessComponent<any> = ({component: Component, loggedIn, ...rest}): ReactElement<{}> => {
   const renderByProps = (props: any): ReactNode => (
     loggedIn ?
       <Component {...props}/> :
