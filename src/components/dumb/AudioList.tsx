@@ -74,38 +74,43 @@ export class AudioList extends React.Component<ThisProps> {
   };
 
   private renderAudios = (): ReactNode => {
-    return this.props.searchResult.records.map((record: SearchRecord) => {
-      const audio: Audio = this.props.audios[record.index];
-      if (!audio) {
-        return;
-      }
-      return (
-        <div key={audio.id} className={audio.playing || audio.id === this.props.activeAudio.id ?
-          'audio-wrapper active' : 'audio-wrapper'}>
-          <span className={'left-outline'}/>
-          <div className={'audio flex'}>
-            <button className={'item-play'} onClick={this.props.onItemPlayClick.bind(this, audio)}>
-              <i className={audio.playing ? 'far fa-pause-circle' : 'far fa-play-circle'}/>
-            </button>
-            <div className={'audio-header pl20 pr20 flex-a'}>
-              {this.renderItemHeader(audio, record)}
-            </div>
-            <div className={'audio-options flex-m'}>
-              <p>{this.getDuration(audio)}</p>
-              <button onClick={this.props.onLyricsWrapperShow.bind(this, audio)}>
-                <i className={'far fa-comment'}/>
+    return this.props.searchResult.records.length === 0 ? (
+        <div className={'empty flex-m'}>
+          <p>Nothing found...</p>
+        </div>
+      ) :
+      this.props.searchResult.records.map((record: SearchRecord) => {
+        const audio: Audio = this.props.audios[record.index];
+        if (!audio) {
+          return;
+        }
+        return (
+          <div key={audio.id} className={audio.playing || audio.id === this.props.activeAudio.id ?
+            'audio-wrapper active' : 'audio-wrapper'}>
+            <span className={'left-outline'}/>
+            <div className={'audio flex'}>
+              <button className={'item-play'} onClick={this.props.onItemPlayClick.bind(this, audio)}>
+                <i className={audio.playing ? 'far fa-pause-circle' : 'far fa-play-circle'}/>
               </button>
-              <button onClick={this.props.onEditWrapperShow.bind(this, audio)}>
-                <i className={'fas fa-edit'}/>
-              </button>
-              <button onClick={this.props.onItemDeleteClick.bind(this, audio)}>
-                <i className={'fas fa-times'}/>
-              </button>
+              <div className={'audio-header pl20 pr20 flex-a'}>
+                {this.renderItemHeader(audio, record)}
+              </div>
+              <div className={'audio-options flex-m'}>
+                <p>{this.getDuration(audio)}</p>
+                <button onClick={this.props.onLyricsWrapperShow.bind(this, audio)}>
+                  <i className={'far fa-comment'}/>
+                </button>
+                <button onClick={this.props.onEditWrapperShow.bind(this, audio)}>
+                  <i className={'fas fa-edit'}/>
+                </button>
+                <button onClick={this.props.onItemDeleteClick.bind(this, audio)}>
+                  <i className={'fas fa-times'}/>
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      );
-    });
+        );
+      });
   };
 
   private renderItemHeader = (audio: Audio, record: SearchRecord): ReactNode => {
@@ -154,7 +159,7 @@ export class AudioList extends React.Component<ThisProps> {
                   this.props.activeLyrics.audio.lyrics :
                   <span>No lyrics found...</span>
               }
-              </p>
+            </p>
           </div>
           <div className={'form-footer flex p20'}>
             <button onClick={this.hideLyricsWrapper}>Close</button>
