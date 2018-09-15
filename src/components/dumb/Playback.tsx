@@ -30,11 +30,11 @@ export class Playback extends React.Component<ThisProps> {
 
   public componentDidMount(): void {
     // hide volume popup if target is not popup or volume button
-    window.addEventListener('click', this.windowClickListener);
+    window.addEventListener('click', this.handleWindowClick);
   }
 
   public componentWillUnmount(): void {
-    window.removeEventListener('click', this.windowClickListener);
+    window.removeEventListener('click', this.handleWindowClick);
   }
 
   public render(): ReactNode {
@@ -89,7 +89,7 @@ export class Playback extends React.Component<ThisProps> {
     );
   }
 
-  private windowClickListener = (e: any) => {
+  private handleWindowClick = (e: any) => {
     let target: Element | null = e.target;
     while (target) {
       const classes: DOMTokenList = target.classList;

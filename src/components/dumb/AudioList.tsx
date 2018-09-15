@@ -32,6 +32,14 @@ export class AudioList extends React.Component<ThisProps> {
   private static DEFAULT_AUTHOR: string = 'Unknown Author';
   private static DEFAULT_COVER_ART: string = 'img/cover_art.png';
 
+  public componentDidMount(): void {
+    window.addEventListener('keyup', this.handleWindowKeyup);
+  }
+
+  public componentWillUnmount(): void {
+    window.removeEventListener('keyup', this.handleWindowKeyup);
+  }
+
   public render(): ReactNode {
     return (
       <div className={'content-wrapper'}>
@@ -236,5 +244,12 @@ export class AudioList extends React.Component<ThisProps> {
   private saveEditForm = (): void => {
     this.props.onEditAudioSave();
     this.props.onEditWrapperHide();
+  };
+
+  private handleWindowKeyup = (e: KeyboardEvent): void => {
+    if (e.code === 'Escape') {
+      this.props.onEditWrapperHide();
+      this.props.onLyricsWrapperHide();
+    }
   };
 }
