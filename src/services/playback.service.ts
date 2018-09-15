@@ -99,6 +99,10 @@ class PlaybackService {
   private applySettings = (): void => {
     this.howl.loop(this.getRepeatSettings());
     this.howl.volume(this.getVolumeSettings());
+    this.howl.off('play');
+    this.howl.off('pause');
+    this.howl.off('stop');
+    this.howl.off('end');
     this.howl.on('play', this.onPlay);
     this.howl.on('pause', this.onPause);
     this.howl.on('stop', this.onStop);

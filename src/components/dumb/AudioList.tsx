@@ -75,7 +75,7 @@ export class AudioList extends React.Component<ThisProps> {
         <div key={audio.id} className={audio.playing || audio.id === this.props.activeAudio.id ?
           'audio-wrapper active' : 'audio-wrapper'}>
           <span className={'left-outline'}/>
-          <div className={'audio p20 flex'}>
+          <div className={'audio flex'}>
             <button className={'item-play'} onClick={this.props.onItemPlayClick.bind(this, audio)}>
               <i className={audio.playing ? 'far fa-pause-circle' : 'far fa-play-circle'}/>
             </button>

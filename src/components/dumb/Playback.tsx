@@ -23,6 +23,20 @@ interface ThisProps {
 
 export class Playback extends React.Component<ThisProps> {
 
+  public componentWillUpdate(): void {
+    // trigger resize to fix buggy slider bars
+    window.dispatchEvent(new Event('resize'));
+  }
+
+  public componentDidMount(): void {
+    // hide volume popup if target is not popup or volume button
+    window.addEventListener('click', this.windowClickListener);
+  }
+
+  public componentWillUnmount(): void {
+    window.removeEventListener('click', this.windowClickListener);
+  }
+
   public render(): ReactNode {
     return (
       <div className={this.props.activeAudio.id ? 'controls flex' : ' controls flex disabled'}>
@@ -75,23 +89,19 @@ export class Playback extends React.Component<ThisProps> {
     );
   }
 
-  public componentDidMount(): void {
-    // trigger resize to fix buggy slider bars
-    window.dispatchEvent(new Event('resize'));
-    // hide volume popup if target is not popup or volume button
-    window.addEventListener('click', (e: any) => {
-      let target: Element | null = e.target;
-      while (target) {
-        if (target.classList.contains('volume-popup') || target.classList.contains('volume-btn')) {
-          return;
-        }
-        target = target.parentElement;
+  private windowClickListener = (e: any) => {
+    let target: Element | null = e.target;
+    while (target) {
+      const classes: DOMTokenList = target.classList;
+      if (classes.contains('volume-popup') || classes.contains('volume-btn')) {
+        return;
       }
-      if (this.props.volumePopup) {
-        this.props.onVolumePopupClick();
-      }
-    });
-  }
+      target = target.parentElement;
+    }
+    if (this.props.volumePopup) {
+      this.props.onVolumePopupClick();
+    }
+  };
 
   private renderTime = (): string => {
     const minutes: number = Math.floor(this.props.time / 60);

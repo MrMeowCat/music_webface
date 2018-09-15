@@ -61,6 +61,9 @@
 .audio-wrapper.active > span {
   background: #3abe8c;
 }
+.audio {
+  padding: 13px 13px 13px 20px;
+}
 .audio button {
   background: transparent;
   height: 100%;

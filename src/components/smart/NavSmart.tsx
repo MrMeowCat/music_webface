@@ -58,6 +58,7 @@ const mapDispatch2Props = (dispatch: Dispatch<ActionTypes>): any => {
   const logout = (): void => {
     authService.logout();
     dispatch(Actions.logout());
+    dispatch(Actions.getAudios([]));
   };
 
   return {

@@ -56,6 +56,9 @@ class PlaybackSmart extends React.Component<ThisProps, ThisState> {
       volume: playbackService.getVolumeSettings(),
       volumePopup: false
     };
+  }
+
+  public componentDidMount(): void {
     playbackService.on(PlaybackEvents.Play, () => {
       this.interval = setInterval(() => {
         if (!this.state.timelineLocked) {
@@ -74,6 +77,16 @@ class PlaybackSmart extends React.Component<ThisProps, ThisState> {
       clearInterval(this.interval);
       this.playNext();
     });
+  }
+
+  public componentWillUnmount(): void {
+    clearInterval(this.interval);
+    playbackService.on(PlaybackEvents.Play, () => {});
+    playbackService.on(PlaybackEvents.Pause, () => {});
+    playbackService.on(PlaybackEvents.Stop, () => {});
+    playbackService.on(PlaybackEvents.End, () => {});
+    playbackService.stop();
+    this.props.switchActiveAudio({}, false);
   }
 
   public render(): ReactNode {

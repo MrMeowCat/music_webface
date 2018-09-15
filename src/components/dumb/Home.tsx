@@ -9,28 +9,22 @@ interface ThisState {
 
 export class Home extends React.Component<{}, ThisState> {
 
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      contentPadding: 0
-    }
-  }
+  private contentPadding: number = 0;
 
   public componentDidMount(): void {
     const nav: Element | null = document.querySelector('.nav-wrapper');
     if (!nav) {
       return;
     }
-    this.setState({
-      contentPadding: nav.clientHeight
-    });
+    this.contentPadding = nav.clientHeight;
+    this.forceUpdate();
   }
 
   public render(): ReactNode {
     return (
       <div>
         {React.createElement(NavSmart)}
-        <div style={{paddingTop: this.state.contentPadding}} className={'pl30 pr30 flex-c'}>
+        <div style={{paddingTop: this.contentPadding}} className={'pl30 pr30 flex-c'}>
           {React.createElement(AudioListSmart)}
         </div>
       </div>
