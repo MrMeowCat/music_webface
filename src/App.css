@@ -1,0 +1,9 @@
+.toast * {
+  font-family: 'Open Sans', sans-serif;
+}
+.toast .Toastify__toast {
+  padding: 20px;
+}
+.toast .Toastify__close-button {
+  align-self: center;
+}

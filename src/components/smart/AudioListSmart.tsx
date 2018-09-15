@@ -4,6 +4,7 @@ import { Audio } from 'models';
 import * as React from 'react';
 import { ReactNode } from 'react';
 import { connect } from 'react-redux';
+import { toast } from 'react-toastify';
 import { Dispatch } from 'redux';
 import { audioService, playbackService, SearchResult } from 'services';
 import { Actions, ActionTypes } from 'store/actions';
@@ -44,17 +45,22 @@ const mapDispatch2Props = (dispatch: Dispatch<ActionTypes>): any => {
       dispatch(Actions.showSpinner(true));
       audioService.save(audio).then((res: AxiosResponse) => {
         dispatch(Actions.saveAudio(res.data));
+        toast.success('Audio saved!');
       }).catch((err: AxiosError) => {
-        console.log(err);
+        if (err.response) {
+          toast.error('Failed to save audio!');
+        }
       }).then(() => dispatch(Actions.showSpinner(false)));
     },
     deleteAudio: (audio: Audio): void => {
       dispatch(Actions.showSpinner(true));
       audioService.deleteAudio(audio).then((res: AxiosResponse) => {
         dispatch(Actions.deleteAudio(audio));
-        playbackService.stop();
+        toast.success('Audio deleted!');
       }).catch((err: AxiosError) => {
-        console.log(err);
+        if (err.response) {
+          toast.error('Failed to delete audio!');
+        }
       }).then(() => dispatch(Actions.showSpinner(false)));
     }
   };
@@ -110,6 +116,9 @@ class AudioListSmart extends React.Component<ThisProps, ThisState> {
   };
 
   private handleItemDeleteClick = (audio: Audio): void => {
+    if (audio.id === this.props.activeAudio.id) {
+      playbackService.stop();
+    }
     this.props.deleteAudio(audio);
   };
 

@@ -4,6 +4,7 @@ import { Audio } from 'models';
 import * as React from 'react';
 import { ReactNode, RefObject } from 'react';
 import { connect } from 'react-redux';
+import { toast } from 'react-toastify';
 import { Dispatch } from 'redux';
 import { audioService, authService, SearchResult } from 'services';
 import { Actions, ActionTypes } from 'store/actions';
@@ -32,6 +33,9 @@ const mapDispatch2Props = (dispatch: Dispatch<ActionTypes>): any => {
       dispatch(Actions.showSpinner(false));
     }).catch((err: AxiosError) => {
       dispatch(Actions.showSpinner(false));
+      if (err.response) {
+        toast.error('Failed to fetch audios!');
+      }
     });
   };
   const searchAudios = (audios: Audio[], query: string): void => {
@@ -47,8 +51,12 @@ const mapDispatch2Props = (dispatch: Dispatch<ActionTypes>): any => {
       dispatch(Actions.showSpinner(true));
       audioService.upload(fileUploadInput.files[0]).then((res: AxiosResponse) => {
         getAudios();
+        toast.success('Audio uploaded!');
       }).catch((err: AxiosError) => {
         dispatch(Actions.showSpinner(false));
+        if (err.response) {
+          toast.error('Failed to upload audio!');
+        }
       }).then(() => {
         fileUploadInput.value = '';
       });

@@ -4,6 +4,7 @@ import * as React from 'react';
 import { ReactNode } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
+import { toast } from 'react-toastify';
 import { Dispatch } from 'redux';
 import { authService } from 'services';
 import { Actions, ActionTypes } from 'store/actions';
@@ -13,9 +14,7 @@ interface ThisProps {
   loggedIn: boolean;
   pending: boolean;
   error: boolean;
-  loginPending: () => any;
-  loginSuccess: () => any;
-  loginFailed: () => any;
+  login: (username: string, password: string) => any;
 }
 
 interface ThisState {
@@ -33,9 +32,19 @@ const mapState2Props = (state: State): any => {
 
 const mapDispatch2Props = (dispatch: Dispatch<ActionTypes>): any => {
   return {
-    loginPending: () => dispatch(Actions.loginPending()),
-    loginSuccess: () => dispatch(Actions.loginSuccess()),
-    loginFailed: () => dispatch(Actions.loginFailed())
+    login: (username: string, password: string) => {
+      dispatch(Actions.loginPending());
+      authService.login(username, password)
+        .then((res: AxiosResponse) => {
+          dispatch(Actions.loginSuccess());
+        })
+        .catch((err: AxiosError) => {
+          dispatch(Actions.loginFailed());
+          if (err.response && err.response.status !== 401) {
+            toast.error('Unable to login');
+          }
+        });
+    }
   };
 };
 
@@ -64,14 +73,7 @@ class LoginSmart extends React.Component<ThisProps, ThisState> {
   private handlePasswordChange = (e: any): void => this.setState({password: e.target.value});
 
   private handleLoginClick = (): void => {
-    this.props.loginPending();
-    authService.login(this.state.username, this.state.password)
-      .then((res: AxiosResponse) => {
-        this.props.loginSuccess();
-      })
-      .catch((err: AxiosError) => {
-        this.props.loginFailed();
-      });
+    this.props.login(this.state.username, this.state.password);
   };
 }
 
