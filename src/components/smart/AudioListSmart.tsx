@@ -52,6 +52,7 @@ const mapDispatch2Props = (dispatch: Dispatch<ActionTypes>): any => {
       dispatch(Actions.showSpinner(true));
       audioService.deleteAudio(audio).then((res: AxiosResponse) => {
         dispatch(Actions.deleteAudio(audio));
+        playbackService.stop();
       }).catch((err: AxiosError) => {
         console.log(err);
       }).then(() => dispatch(Actions.showSpinner(false)));

@@ -2,6 +2,10 @@ import { Howl } from 'howler';
 import { Audio } from 'models';
 import { audioService, storageService } from 'services';
 
+export enum PlaybackEvents {
+  Play, Pause, Stop, End
+}
+
 class PlaybackService {
   private static SHUFFLE_KEY: string = 'shuffle';
   private static REPEAT_KEY: string = 'repeat';
@@ -10,6 +14,9 @@ class PlaybackService {
   private activeAudio: Audio;
   private howl: Howl;
   private onPlay: Function;
+  private onPause: Function;
+  private onStop: Function;
+  private onEnd: Function;
 
   public constructor() {
     this.activeAudio = {};
@@ -57,6 +64,7 @@ class PlaybackService {
       this.activeAudio = audio;
       return;
     }
+    this.stop();
     this.howl.unload();
     this.howl = new Howl({
       src: [audioService.getAudioFileUrl(audio.fileName!)]
@@ -64,7 +72,10 @@ class PlaybackService {
     this.howl.play();
     this.applySettings();
     this.activeAudio = audio;
-    console.log(this.activeAudio);
+  };
+
+  public stop = (): void => {
+    this.howl.stop();
   };
 
   public getTime = (): number => {
@@ -75,8 +86,13 @@ class PlaybackService {
     this.howl.seek(time);
   };
 
-  public setOnPlay = (onPlay: Function): void => {
-    this.onPlay = onPlay;
+  public on = (event: PlaybackEvents, cb: Function): void => {
+    switch (event) {
+      case PlaybackEvents.Play: this.onPlay = cb; break;
+      case PlaybackEvents.Pause: this.onPause = cb; break;
+      case PlaybackEvents.Stop: this.onStop = cb; break;
+      case PlaybackEvents.End: this.onEnd = cb; break;
+    }
     this.applySettings();
   };
 
@@ -84,6 +100,9 @@ class PlaybackService {
     this.howl.loop(this.getRepeatSettings());
     this.howl.volume(this.getVolumeSettings());
     this.howl.on('play', this.onPlay);
+    this.howl.on('pause', this.onPause);
+    this.howl.on('stop', this.onStop);
+    this.howl.on('end', this.onEnd);
   };
 }
 

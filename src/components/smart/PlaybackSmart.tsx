@@ -4,9 +4,11 @@ import * as React from 'react';
 import { ReactNode } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { playbackService } from 'services';
+import { PlaybackEvents, playbackService } from 'services';
 import { Actions, ActionTypes } from 'store/actions';
 import { State } from 'store/states';
+import { Utils } from 'utils';
+import Timer = NodeJS.Timer;
 
 interface ThisProps {
   audios: Audio[];
@@ -41,6 +43,9 @@ const mapDispatch2Props = (dispatch: Dispatch<ActionTypes>): any => {
 
 class PlaybackSmart extends React.Component<ThisProps, ThisState> {
 
+  private interval: Timer;
+  private playedAudios: {[id: string]: Audio} = {};
+
   public constructor(props: ThisProps) {
     super(props);
     this.state = {
@@ -51,14 +56,23 @@ class PlaybackSmart extends React.Component<ThisProps, ThisState> {
       volume: playbackService.getVolumeSettings(),
       volumePopup: false
     };
-    playbackService.setOnPlay(() => {
-      setInterval(() => {
+    playbackService.on(PlaybackEvents.Play, () => {
+      this.interval = setInterval(() => {
         if (!this.state.timelineLocked) {
-          this.setState({
-            time: playbackService.getTime()
-          });
+          this.setState({time: playbackService.getTime()});
         }
       }, 1000);
+    });
+    playbackService.on(PlaybackEvents.Pause, () => {
+      clearInterval(this.interval);
+    });
+    playbackService.on(PlaybackEvents.Stop, () => {
+      clearInterval(this.interval);
+      this.setState({time: 0});
+    });
+    playbackService.on(PlaybackEvents.End, () => {
+      clearInterval(this.interval);
+      this.playNext();
     });
   }
 
@@ -88,33 +102,72 @@ class PlaybackSmart extends React.Component<ThisProps, ThisState> {
 
   private handleShuffleClick = (): void => {
     playbackService.saveShuffleSettings(!this.state.shuffle);
-    this.setState({
-      shuffle: !this.state.shuffle
-    });
+    if (this.state.shuffle) {
+      this.playedAudios = {};
+    }
+    this.setState({shuffle: !this.state.shuffle});
   };
 
   private handleRepeatClick = (): void => {
     playbackService.saveRepeatSettings(!this.state.repeat);
-    this.setState({
-      repeat: !this.state.repeat
-    });
+    this.setState({repeat: !this.state.repeat});
   };
 
-  private handleTimelineBeforeChange = (): void => this.setState({timelineLocked: true});
+  private handleTimelineBeforeChange = (): void => {
+    this.setState({timelineLocked: true});
+  };
 
   private handleTimelineAfterChange = (time: number): void => {
     playbackService.setTime(time);
     this.setState({time, timelineLocked: false});
   };
 
-  private handleTimelineChange = (time: number): void => this.setState({time});
+  private handleTimelineChange = (time: number): void => {
+    this.setState({time});
+  };
 
   private handleVolumeChange = (volume: number): void => {
     playbackService.saveVolumeSettings(volume);
     this.setState({volume});
   };
 
-  private handleVolumePopupClick = (): void => this.setState({volumePopup: !this.state.volumePopup});
+  private handleVolumePopupClick = (): void => {
+    this.setState({volumePopup: !this.state.volumePopup});
+  };
+
+  private playNext = (): void => {
+    if (this.state.repeat) {
+      return;
+    }
+    const next: Audio = this.state.shuffle ? this.getNextShuffle() : this.getNext();
+    this.props.switchActiveAudio(next, true);
+  };
+
+  private getNext = (): Audio => {
+    let next: Audio = this.props.activeAudio;
+    for (let i: number = 0, length: number = this.props.audios.length; i < length; i++) {
+      const audio: Audio = this.props.audios[i];
+      if (next.id === audio.id) {
+        next = this.props.audios[i === length - 1 ? 0 : i + 1];
+        break;
+      }
+    }
+    return next;
+  };
+
+  private getNextShuffle = (): Audio => {
+    const next: Audio = this.props.activeAudio;
+    this.playedAudios[next.id!] = next;
+    const ids: string[] = this.props.audios.map((audio: Audio) => audio.id!);
+    let filteredIds: string[] = ids.filter((id: string) => !this.playedAudios[id]);
+    if (filteredIds.length === 0) {
+      this.playedAudios = {};
+      this.playedAudios[next.id!] = next;
+      filteredIds = ids.filter((id: string) => !this.playedAudios[id]);
+    }
+    const nextId: string = filteredIds[Utils.randomInt(0, filteredIds.length)];
+    return this.props.audios.find((audio: Audio) => audio.id === nextId)!;
+  }
 }
 
 export default connect(mapState2Props, mapDispatch2Props)(PlaybackSmart);

@@ -75,11 +75,22 @@ export class Playback extends React.Component<ThisProps> {
     );
   }
 
-  /**
-   * Triggers resize to fix buggy slider bars.
-   */
   public componentDidMount(): void {
+    // trigger resize to fix buggy slider bars
     window.dispatchEvent(new Event('resize'));
+    // hide volume popup if target is not popup or volume button
+    window.addEventListener('click', (e: any) => {
+      let target: Element | null = e.target;
+      while (target) {
+        if (target.classList.contains('volume-popup') || target.classList.contains('volume-btn')) {
+          return;
+        }
+        target = target.parentElement;
+      }
+      if (this.props.volumePopup) {
+        this.props.onVolumePopupClick();
+      }
+    });
   }
 
   private renderTime = (): string => {
