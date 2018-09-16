@@ -21,7 +21,7 @@ interface ThisProps {
 const mapState2Props = (state: State): any => {
   return {
     audios: state.audioListState.audios
-  }
+  };
 };
 
 const mapDispatch2Props = (dispatch: Dispatch<ActionTypes>): any => {
@@ -91,7 +91,8 @@ class NavSmart extends React.Component<ThisProps> {
       <div>
         <Nav onSearchQueryChange={this.handleSearchQueryChange}
              onUploadClick={this.handleUploadClick}
-             onLogoutClick={this.handleLogoutClick}/>
+             onLogoutClick={this.handleLogoutClick}
+        />
         <input type={'file'}
                style={{display: 'none'}}
                accept={'audio/mpeg'}

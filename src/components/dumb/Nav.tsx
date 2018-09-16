@@ -1,4 +1,5 @@
 import 'components/dumb/Nav.css';
+import { EqualizerSmart } from 'components/smart';
 import * as React from 'react';
 import { ReactNode } from 'react';
 
@@ -24,9 +25,10 @@ export class Nav extends React.Component<ThisProps> {
               <i className={'fas fa-search'}/>
             </div>
           </div>
-          <button className={'upload-btn'} onClick={this.props.onUploadClick}>
+          <button className={'nav-btn'} onClick={this.props.onUploadClick}>
             <i className={'fas fa-cloud-upload-alt'}/>
           </button>
+          {React.createElement(EqualizerSmart)}
           <div className={'nav-logout ml30 mr30'}>
             <a className={'flex-m'} onClick={this.props.onLogoutClick}>
               Logout

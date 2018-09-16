@@ -46,16 +46,16 @@
 .nav-search div.active i, .nav-search div:hover i {
   color: #38b989;
 }
-.upload-btn {
+.nav-btn {
   background: transparent;
   border: none;
-  margin-left: 4px;
+  margin-left: 8px;
   padding: 8px;
   font-size: 1.1em;
-  color: #666;
+  color: #999;
   transition: all 0.2s ease;
 }
-.upload-btn:hover {
+.nav-btn:hover {
   color: #3abe8c;
 }
 

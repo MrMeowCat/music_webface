@@ -1,0 +1,39 @@
+.form.equalizer {
+  width: 600px;
+}
+.scale {
+  padding-top: 40px;
+}
+.scale p {
+  font-size: 0.9em;
+  font-weight: 600;
+  color: #666;
+}
+.filters {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+.filters > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.filters > div p {
+  font-size: 0.9em;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 20px;
+}
+.slider-eq {
+  height: 150px;
+  width: 6px;
+}
+.slider-eq .bar {
+  width: 6px;
+  height: auto;
+}
+.slider-eq .handle {
+  top: auto;
+  left: -9px;
+}
