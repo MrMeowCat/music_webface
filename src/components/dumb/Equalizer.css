@@ -1,6 +1,44 @@
 .form.equalizer {
   width: 600px;
 }
+.s__control {
+  border: 1px solid #bbb;
+  border-radius: 2px !important;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 4px;
+}
+.s__control:hover {
+  border: 1px solid #3abe8c !important;
+}
+.s__control--is-focused {
+  border: 1px solid #339f74 !important;
+}
+.s__menu {
+  margin: 0;
+  margin-top: 8px !important;
+  border: 1px solid #bbb;
+  border-radius: 2px !important;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  box-shadow: none !important;
+  z-index: 2 !important;
+}
+.s__menu-list {
+  padding: 0 !important;
+}
+.s__option {
+  outline: none !important;
+  transition: all 0.1s ease;
+}
+.s__option:hover, .s__option--is-focused {
+  background-color: #eee !important;
+}
+.s__option--is-selected, .s__option--is-selected:hover {
+  background-color: #3abe8c !important;
+  color: #fff !important;
+}
 .scale {
   padding-top: 40px;
 }

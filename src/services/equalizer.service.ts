@@ -1,4 +1,4 @@
-import { DefaultPresets, Preset } from 'models';
+import { Preset, Presets, PresetTypes } from 'models';
 import { storageService } from 'services/storage.service';
 
 class EqualizerService {
@@ -31,13 +31,13 @@ class EqualizerService {
     this.setFilter(this.hf, 'highshelf', EqualizerService.HIGH_FREQUENCY, preset.high, this.mhf);
   };
 
-  public getPreset = (): Preset => {
-    const preset: any = storageService.get(EqualizerService.PRESET_KEY);
-    return preset ? JSON.parse(preset) as Preset : DefaultPresets.FLAT;
+  public getPresetType = (): PresetTypes => {
+    const type: any = storageService.get(EqualizerService.PRESET_KEY);
+    return type ? type : Presets.FLAT.type;
   };
 
-  public savePreset = (preset: Preset): void => {
-    storageService.save(EqualizerService.PRESET_KEY, JSON.stringify(preset));
+  public savePresetType = (type: PresetTypes): void => {
+    storageService.save(EqualizerService.PRESET_KEY, type);
   };
 
   public getMaxGain = (): number => {
